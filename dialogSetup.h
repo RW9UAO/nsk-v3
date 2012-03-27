@@ -26,6 +26,10 @@ public slots:
     void MyEventHandler();
 private slots:
     void on_pushButton_clicked();
+    void on_P1_clicked();
+    void on_P2_clicked();
+    void on_P3_clicked();
+    void on_P4_clicked();
 };
 
 #endif // DIALOGSETUP_H

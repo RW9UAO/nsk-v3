@@ -675,7 +675,9 @@ void Thread_485::run() {
                 qDebug("CE303 goes offline, try open it. wait some time");// после отвала се303 тупит пару минут
             }
             //обновим показания диалога CE303
-            if (NULL != wnd->dlgCE303.get()) {
+            //if (NULL != wnd->dlgCE303.get()) {
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if(!wnd->data.dlgCE303isVisible){
                 emit changeDataCE303();
             }
         }//if(wnd->isCE303){

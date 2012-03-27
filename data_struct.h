@@ -11,6 +11,7 @@
 
 // глобальные переменные, задаем и обрабатываем в разных потоках
 struct data_struct{
+    bool dlgCE303isVisible;
     QString tempstr;//переменная для обмена с диалогами
     int dialogparam;//передадим параметр в диалог
     bool servicemode;//сервисный режим, доступ к настройкам

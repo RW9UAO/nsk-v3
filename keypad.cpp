@@ -7,6 +7,7 @@ Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), 
     dui->setupUi(this);
     this->data = d;
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    dui->lineEdit->setEchoMode(QLineEdit::Normal);
     switch(this->data->dialogparam){
     case 1:
         dui->label->setText("Время вводится в виде ЧЧ.ММ.СС\nнапример 21.00.00");
@@ -21,9 +22,11 @@ Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), 
         dui->label->setText("Введите пароль");
         dui->lineEdit->setEchoMode(QLineEdit::Password);
     default:
-        this->close();
+        //this->close();
+        dui->label->setText("");
         break;
     }
+    this->data->dialogparam = 0;
 }
 
 Dialogkeypad::~Dialogkeypad(){
