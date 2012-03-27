@@ -6,6 +6,10 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
+    //проинициализируем переменные
+    set_defaults();
+    this->done = true;
+    read_config();
 #if defined(ARM)
     this->setWindowFlags(Qt::FramelessWindowHint);
 #endif
@@ -18,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->dlgNasos2.reset(new DialogNasos2( &this->data, this));
     this->dlgNasos3.reset(new DialogNasos3( &this->data, this));
     this->dlgNasos4.reset(new DialogNasos4( &this->data, this));
-    //this->dlgkeypad.reset(new Dialogkeypad( &this->data, this));
+    this->dlgkeypad.reset(new Dialogkeypad( &this->data, this));
+    //this->dlgService.reset(new DialogService( &this->data, this));
 
     this->done = true;
 /*
@@ -29,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setStyleSheet("QMainWindow {background-image: url(:/pict/pict/pult_fon.gif); }");
     ui->frame->setStyleSheet("QFrame {background-image: url(:/pict/pict/popl_0_uroven_avariya.gif); }");
     ui->labelLevel->setText("");
-    ui->labelLevel->setStyleSheet("QLabel{font-family:Monospace;font-size:55pt;color:rgb(200,255,240);background-image: url(none);}");
+    ui->labelLevel->setStyleSheet("QLabel{font-family:Monospace;font-size:55pt;color:rgb(200,255,240);background-image: url(none);}");    
 }
 
 MainWindow::~MainWindow(){
@@ -135,6 +140,8 @@ void MainWindow::on_ShowDialogATV12_clicked(){
 // создадим и покажем диалог с счетчиком
 void MainWindow::on_ShowDialogCE303_clicked(){
     this->dlgCE303.reset(new DialogCE303( &this->data, this));
+    QPoint pos = dlgCE303->pos();
+    pos.setX(0);    pos.setY(0);    dlgCE303->move(pos);
     dlgCE303->exec();
 }
 void MainWindow::on_ShowDialogI2C_clicked(){
@@ -157,6 +164,16 @@ void MainWindow::on_Nasos3_clicked(){
 }
 void MainWindow::on_Nasos4_clicked(){
    dlgNasos4->exec();
+}
+void MainWindow::on_setup_clicked(){
+    this->dlgSetup.reset(new DialogSetup( &this->data, this));
+    QPoint pos = dlgSetup->pos();
+    pos.setX(0);    pos.setY(0);    dlgSetup->move(pos);
+    dlgSetup->exec();
+}
+void MainWindow::on_service_clicked(){
+    this->dlgService.reset(new DialogService( &this->data, this));
+    dlgService->exec();
 }
 //=======================================================================================================================================
 // сигналы от обновление показателей в диалогах
@@ -201,3 +218,4 @@ void MainWindow::onDataChangeNasos4(){
     }
 }
 //=======================================================================================================================================
+

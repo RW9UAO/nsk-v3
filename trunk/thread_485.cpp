@@ -313,14 +313,14 @@ Thread_485::Thread_485(MainWindow *wnd) : ui(wnd->ui), wnd(wnd){
 void Thread_485::init() {
 
     //проинициализируем переменные
-    set_defaults();
+    //set_defaults();
 
 wnd->done = true;
 
 
     //    wnd->data.freq[0] = 0;
 
-    read_config();
+    //read_config();
 
 #if defined(ARM)
     int fd;

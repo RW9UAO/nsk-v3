@@ -81,31 +81,38 @@ void DialogCE303::updateDataCE303(){
 }
 //кнопка "Врeмя"
 void DialogCE303::on_pushButton_clicked(){
+    this->data->dialogparam = 1;//параметр для "подсказки"
     QDialog * d_key = new Dialogkeypad(this->data, this);
-    this->data->dialogparam = 1;
-    d_key->exec();
-    if(this->data->tempstr.size() == 8){
-        qDebug()<< QString("%1").arg(this->data->tempstr);
+    QPoint pos = d_key->pos();//удвинем окно в угол
+    pos.setX(0);    pos.setY(0);    d_key->move(pos);
+    d_key->exec();// покажем диалог
+    if(this->data->tempstr.size() == 8){//если юзер что-то ввел
+        //qDebug()<< QString("%1").arg(this->data->tempstr);
         this->data->CE303needupdate = update_time;
     }
+    //delete d_key;
 }
 //кнопка "Дата"
 void DialogCE303::on_pushButton_2_clicked(){
-    QDialog * d_key = new Dialogkeypad(this->data, this);
     this->data->dialogparam = 2;
+    QDialog * d_key = new Dialogkeypad(this->data, this);
+    QPoint pos = d_key->pos();
+    pos.setX(0);    pos.setY(0);    d_key->move(pos);
     d_key->exec();
     if(this->data->tempstr.size() > 8){
-        qDebug()<< QString("%1").arg(this->data->tempstr);
+        //qDebug()<< QString("%1").arg(this->data->tempstr);
         this->data->CE303needupdate = update_date;
     }
 }
 //кнопка "к-т тр-ра"
 void DialogCE303::on_pushButton_3_clicked(){
-    QDialog * d_key = new Dialogkeypad(this->data, this);
     this->data->dialogparam = 3;
+    QDialog * d_key = new Dialogkeypad(this->data, this);
+    QPoint pos = d_key->pos();
+    pos.setX(0);    pos.setY(0);    d_key->move(pos);
     d_key->exec();
     if(this->data->tempstr.size() > 0){
-        qDebug()<< QString("%1").arg(this->data->tempstr);
+        //qDebug()<< QString("%1").arg(this->data->tempstr);
         this->data->CE303needupdate = update_trans;
     }
 

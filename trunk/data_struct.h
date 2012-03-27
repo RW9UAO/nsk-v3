@@ -11,9 +11,11 @@
 
 // глобальные переменные, задаем и обрабатываем в разных потоках
 struct data_struct{
-    QString tempstr;
-    int dialogparam;
-    bool servicemode;
+    QString tempstr;//переменная для обмена с диалогами
+    int dialogparam;//передадим параметр в диалог
+    bool servicemode;//сервисный режим, доступ к настройкам
+    QString KNSnumber;//номер КНС
+    int servicemodeTTL;//время жизни сервисного режима
     //ATV12 data
     int lft[6];
     int eta[6];
