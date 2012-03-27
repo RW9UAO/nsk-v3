@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->dlgNasos2.reset(new DialogNasos2( &this->data, this));
     this->dlgNasos3.reset(new DialogNasos3( &this->data, this));
     this->dlgNasos4.reset(new DialogNasos4( &this->data, this));
-    this->dlgkeypad.reset(new Dialogkeypad( &this->data, this));
+    //this->dlgkeypad.reset(new Dialogkeypad( &this->data, this));
     //this->dlgService.reset(new DialogService( &this->data, this));
 
     this->done = true;

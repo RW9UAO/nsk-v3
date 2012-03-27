@@ -1,0 +1,41 @@
+<RCC>
+    <qresource prefix="/pict">
+        <file>pict/setred.gif</file>
+        <file>pict/setgreen.gif</file>
+        <file>pict/servis_regim.gif</file>
+        <file>pict/schetchik_red.gif</file>
+        <file>pict/schetchik_green.gif</file>
+        <file>pict/pult_fon.gif</file>
+        <file>pict/popl_4_uroven_avariya.gif</file>
+        <file>pict/popl_4_uroven.gif</file>
+        <file>pict/popl_3_uroven.gif</file>
+        <file>pict/popl_3_4_uroven.gif</file>
+        <file>pict/popl_2_uroven.gif</file>
+        <file>pict/popl_2_4_uroven.gif</file>
+        <file>pict/popl_2_3_uroven.gif</file>
+        <file>pict/popl_2_3_4_uroven.gif</file>
+        <file>pict/popl_1_uroven.gif</file>
+        <file>pict/popl_1_4_uroven.gif</file>
+        <file>pict/popl_1_3_uroven.gif</file>
+        <file>pict/popl_1_3_4_uroven.gif</file>
+        <file>pict/popl_1_2_uroven.gif</file>
+        <file>pict/popl_1_2_4_uroven.gif</file>
+        <file>pict/popl_1_2_3_uroven.gif</file>
+        <file>pict/popl_1_2_3_4_uroven.gif</file>
+        <file>pict/popl_0_uroven_avariya.gif</file>
+        <file>pict/popl_0_uroven.gif</file>
+        <file>pict/perezagruzka.gif</file>
+        <file>pict/nasosred_vl.gif</file>
+        <file>pict/nasosred_t.gif</file>
+        <file>pict/nasosred_a.gif</file>
+        <file>pict/nasosgreen.gif</file>
+        <file>pict/nasosgray.gif</file>
+        <file>pict/log_avarij_red.gif</file>
+        <file>pict/log_avarij_green.gif</file>
+        <file>pict/housered.gif</file>
+        <file>pict/housegreen.gif</file>
+        <file>pict/fazared.gif</file>
+        <file>pict/fazagreen.gif</file>
+        <file>pict/ustanovki_fon.gif</file>
+    </qresource>
+</RCC>

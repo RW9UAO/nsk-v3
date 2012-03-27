@@ -18,8 +18,8 @@
 
 //void Thread_485::set_defaults(void){
 void MainWindow::set_defaults(void){
-    this->data.servicemode = false;
-    //this->data.servicemode = true;
+    //this->data.servicemode = false;
+    this->data.servicemode = true;
     this->data.KNSnumber = "123";
     this->isATV12 = true;        //по умолчанию включим 4-ре частотника и счетчик
     this->isSoftStart = false;
