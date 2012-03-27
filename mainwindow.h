@@ -18,6 +18,8 @@
 #include "dialogNasos2.h"
 #include "dialogNasos3.h"
 #include "dialogNasos4.h"
+#include "dialogService.h"
+#include "dialogSetup.h"
 #include "keypad.h"
 #include "data_struct.h"
 
@@ -32,6 +34,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void updateDataMain();
+    void set_defaults(void);
+    void read_config(void);
+
 
     Ui::MainWindow *ui;
 
@@ -53,6 +58,8 @@ public:
     std::auto_ptr<DialogNasos3> dlgNasos3;
     std::auto_ptr<DialogNasos4> dlgNasos4;
     std::auto_ptr<Dialogkeypad> dlgkeypad;
+    std::auto_ptr<DialogService> dlgService;
+    std::auto_ptr<DialogSetup> dlgSetup;
 
     data_struct data;
     bool done;
@@ -67,6 +74,8 @@ private slots:
     void on_Nasos2_clicked();
     void on_Nasos3_clicked();
     void on_Nasos4_clicked();
+    void on_setup_clicked();
+    void on_service_clicked();
 
 public slots:
     void onDataChangeATV12();

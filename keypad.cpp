@@ -6,16 +6,23 @@
 Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), dui(new Ui::Dialogkeypad){
     dui->setupUi(this);
     this->data = d;
-    //this->setWindowFlags(Qt::CustomizeWindowHint);
-    if(this->data->dialogparam == 1){
-        //dui->label->setText("Время вводится в виде ЧЧ.ММ.СС\nнапример 23.00.00");
-        dui->label->setText("hh.mm.ss 23.00.00");
-    }
-    if(this->data->dialogparam == 2){
-        dui->label->setText("nn.dd.mm.yy 01.23.10.12\n00-вск, 01-пнд");
-    }
-    if(this->data->dialogparam == 3){
-        dui->label->setText("Current trans");
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    switch(this->data->dialogparam){
+    case 1:
+        dui->label->setText("Время вводится в виде ЧЧ.ММ.СС\nнапример 21.00.00");
+        break;
+    case 2:
+        dui->label->setText("Дата в виде nn.dd.mm.yy 01.23.10.12\nгде nn день недели: 00-вск, 01-пнд");
+        break;
+    case 3:
+        dui->label->setText("Токовый трансформатор. Без точки.");
+        break;
+    case 4:
+        dui->label->setText("Введите пароль");
+        dui->lineEdit->setEchoMode(QLineEdit::Password);
+    default:
+        this->close();
+        break;
     }
 }
 
@@ -65,10 +72,10 @@ void Dialogkeypad::on_bbs_clicked(){
     dui->lineEdit->backspace();
 }
 void Dialogkeypad::on_save_clicked(){
-    this->data->tempstr = dui->lineEdit->text();
+    this->data->tempstr = dui->lineEdit->text();//cкопируем в глобальную переменную
     this->close();
 }
 void Dialogkeypad::on_save_2_clicked(){
-    this->data->tempstr = "";
+    this->data->tempstr = "";//юзер нифига не ввел
     this->close();
 }

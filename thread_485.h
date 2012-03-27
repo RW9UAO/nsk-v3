@@ -28,8 +28,8 @@ private:
         void closeCE303(void);
         int read_modbus_reg(unsigned char dev_address, unsigned short reg);
         int write_modbus_reg(unsigned char dev_address, unsigned short reg, unsigned short value);
-        void read_config(void);
-        void set_defaults(void);
+//        void read_config(void);
+//        void set_defaults(void);
 
 signals:
         void changeDataATV12();

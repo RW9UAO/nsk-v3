@@ -79,7 +79,11 @@ int main(int argc, char *argv[]){
     Thread_I2C t3(&w);
 
     // установим кодировку
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("utf-8"));
+    QTextCodec *cyrillicCodec = QTextCodec::codecForName("UTF8-");
+    QTextCodec::setCodecForTr(cyrillicCodec);
+    QTextCodec::setCodecForLocale(cyrillicCodec);
+    QTextCodec::setCodecForCStrings(cyrillicCodec);
+
     installLog();
     //покажем основное окно
     w.show();
