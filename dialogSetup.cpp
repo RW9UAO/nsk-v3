@@ -6,7 +6,8 @@
 DialogSetup::DialogSetup(data_struct * d, QWidget *parent) : QDialog(parent), dui(new Ui::DialogSetup){
     dui->setupUi(this);
     this->data = d;
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    //this->setWindowFlags(Qt::FramelessWindowHint);
+    //this->updatesEnabled();
     //this->updatesEnabled();
     dui->P1->setText(QString("%1").arg(this->data->level_1_sm));
     dui->P2->setText(QString("%1").arg(this->data->level_2_sm));

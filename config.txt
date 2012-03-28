@@ -28,9 +28,11 @@ CE303 yes
 
 #дискретный ввод-вывод
 PCA9555 yes
+PCA9555ADDR 1
 
 #АЦП
 MAX11616 yes
+max11616ADDR 0
 
 PIDtarget 2000
 PID_P 1.1

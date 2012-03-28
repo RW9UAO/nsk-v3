@@ -55,7 +55,9 @@ void MainWindow::set_defaults(void){
     this->data.pca9555_input0 = -1;
     this->data.pca9555_output1R = -1;
     this->data.pca9555_output1W = 0;//all OFF
+    this->data.pca9555ADDR = 0;
     for(int i = 0; i < 12; i++){this->data.max11616[i] = -1;}
+    this->data.max11616ADDR = 0;
     this->data.targetPos = 0; this->data.Pparam = 1; this->data.Dparam = 1; this->data.Iparam = 1;
     this->data.nasos1_current_alarm_bit = -1;
     this->data.nasos2_current_alarm_bit = -1;
@@ -83,11 +85,20 @@ void MainWindow::set_defaults(void){
     this->data.level_to_show_sm = -1;
 }
 //========================================================================================================================
+double get_double_from_config(QString config_line){
+    bool ok;    double temp;
+    //удалим все символы перед пробелом
+    config_line.remove(0, config_line.indexOf(" ",0) + 1);
+    //преобразуем
+    temp = config_line.toDouble(&ok);
+    if(ok){         return temp;    }
+    return -1;
+}
+//========================================================================================================================
 //  config file parser
 //void Thread_485::read_config(void){
 void MainWindow::read_config(void){
     QFile config_file("config.txt");// имя конфигурационного файла
-//    QTextStream out(&file);
     QTextStream config_in(&config_file);// создадим поток для чтения
     QString config_line;
 
@@ -97,6 +108,12 @@ do {
       config_line = config_in.readLine();
       ///////////////////////////////////////
 
+      if( config_line.contains("max11616ADDR") ){
+        this->data.max11616ADDR = get_double_from_config(config_line);
+      }
+      if( config_line.contains("PCA9555ADDR") ){
+        this->data.pca9555ADDR = get_double_from_config(config_line);
+      }
       if (config_line.contains("level_meter") ){
           if (config_line.contains("yes") ){
                   this->islevel_meter = true;
@@ -106,416 +123,143 @@ do {
           }
       }
       if (config_line.contains("level_input_number") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_input_number = temp;
-          }
+          this->data.level_input_number = get_double_from_config(config_line);
       }
       if (config_line.contains("level_empty_raw") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_empty_raw = temp;
-          }
+               this->data.level_empty_raw = get_double_from_config(config_line);
       }
       if (config_line.contains("level_full_raw") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_full_raw = temp;
-          }
+               this->data.level_full_raw = get_double_from_config(config_line);
       }
       if (config_line.contains("level_full_sm") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_full_sm = temp;
-          }
+               this->data.level_full_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("level_1_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_1_bit = temp;
-          }
+               this->data.level_1_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("level_2_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_2_bit = temp;
-          }
+               this->data.level_2_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("level_3_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_3_bit = temp;
-          }
+               this->data.level_3_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("level_4_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_4_bit = temp;
-          }
+               this->data.level_4_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("level_1_sm") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_1_sm = temp;
-          }
+               this->data.level_1_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("level_2_sm") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_2_sm = temp;
-          }
+               this->data.level_2_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("level_3_sm") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_3_sm = temp;
-          }
+               this->data.level_3_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("level_4_sm") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_4_sm = temp;
-          }
+               this->data.level_4_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("overlevel_time_to_stop") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.level_1_bit = temp;
-          }
+               this->data.level_1_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos1_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos1_bit = temp;
-          }
+               this->data.nasos1_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos2_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos2_bit = temp;
-          }
+               this->data.nasos2_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos3_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos3_bit = temp;
-          }
+               this->data.nasos3_bit = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos4_bit") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos4_bit = temp;
-          }
+               this->data.nasos4_bit = get_double_from_config(config_line);
       }
-
       if (config_line.contains("nasos1_current_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos1_current_alarm_border = temp;
-          }
+              this->data.nasos1_current_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos2_current_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos2_current_alarm_border = temp;
-          }
+               this->data.nasos2_current_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos3_current_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos3_current_alarm_border = temp;
-          }
+               this->data.nasos3_current_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos4_current_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos4_current_alarm_border = temp;
-          }
+               this->data.nasos4_current_alarm_border = get_double_from_config(config_line);
       }
-
       if (config_line.contains("nasos1_temp_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos1_temp_alarm_border = temp;
-          }
+               this->data.nasos1_temp_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos2_temp_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos2_temp_alarm_border = temp;
-          }
+               this->data.nasos2_temp_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos3_temp_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos3_temp_alarm_border = temp;
-          }
+               this->data.nasos3_temp_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos4_temp_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos4_temp_alarm_border = temp;
-          }
+               this->data.nasos4_temp_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos1_wet_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos1_wet_alarm_border = temp;
-          }
+               this->data.nasos1_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos2_wet_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos2_wet_alarm_border = temp;
-          }
+               this->data.nasos2_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos3_wet_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos3_wet_alarm_border = temp;
-          }
+               this->data.nasos3_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos4_wet_alarm_border") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-               this->data.nasos4_wet_alarm_border = temp;
-          }
+          this->data.nasos4_wet_alarm_border = get_double_from_config(config_line);
       }
-
     if (config_line.contains("nasos1_current_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos1_current_alarm_bit = temp;
-        }
+             this->data.nasos1_current_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos2_current_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos2_current_alarm_bit = temp;
-        }
+             this->data.nasos2_current_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos3_current_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos3_current_alarm_bit = temp;
-        }
+             this->data.nasos3_current_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos4_current_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos4_current_alarm_bit = temp;
-        }
+             this->data.nasos4_current_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos1_temp_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos1_temp_alarm_bit = temp;
-        }
+             this->data.nasos1_temp_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos2_temp_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos2_temp_alarm_bit = temp;
-        }
+             this->data.nasos2_temp_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos3_temp_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos3_temp_alarm_bit = temp;
-        }
+             this->data.nasos3_temp_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos4_temp_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos4_temp_alarm_bit = temp;
-        }
+             this->data.nasos4_temp_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos1_wet_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos1_wet_alarm_bit = temp;
-        }
+             this->data.nasos1_wet_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos2_wet_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos2_wet_alarm_bit = temp;
-        }
+             this->data.nasos2_wet_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos3_wet_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos3_wet_alarm_bit = temp;
-        }
+             this->data.nasos3_wet_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos4_wet_alarm_bit") ){
-        bool ok;
-        double temp;
-        config_line.remove(0, config_line.indexOf(" ",0) + 1);
-        temp = config_line.toDouble(&ok);
-        if(ok){
-             this->data.nasos4_wet_alarm_bit = temp;
-        }
+             this->data.nasos4_wet_alarm_bit = get_double_from_config(config_line);
     }
       if (config_line.contains("PIDtarget") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, config_line.indexOf(" ",0) + 1);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-              this->data.targetPos = temp;
+              this->data.targetPos = get_double_from_config(config_line);
               qDebug() << QString("PIDtarget %1").arg(this->data.targetPos);
-          }
       }
       if (config_line.contains("PID_P") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, 6);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-              this->data.Pparam = temp;
+              this->data.Pparam = get_double_from_config(config_line);
               qDebug() << QString("Pparam %1").arg(this->data.Pparam);
-          }
       }
       if (config_line.contains("PID_D") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, 6);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-              this->data.Dparam = temp;
+              this->data.Dparam = get_double_from_config(config_line);
               qDebug() << QString("Dparam %1").arg(this->data.Dparam);
-          }
       }
       if (config_line.contains("PID_I") ){
-          bool ok;
-          double temp;
-          config_line.remove(0, 6);
-          temp = config_line.toDouble(&ok);
-          if(ok){
-              this->data.Iparam = temp;
+              this->data.Iparam = get_double_from_config(config_line);
               qDebug() << QString("Iparam %1").arg(this->data.Iparam);
-          }
       }
       if (config_line.contains("PCA9555") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
@@ -558,15 +302,9 @@ do {
         }
     }
     if (config_line.contains("MAXDEV") ){
-        bool ok;
-        int temp;
-        config_line.remove(0, 7);              // уберем лишние символы из строки включая пробел
-        temp = config_line.toInt(&ok, 10);     // преобразуем в integer
-        if(ok){
-            this->ATV12maxNum = temp;    // если без ошибок, установим
+            this->ATV12maxNum = get_double_from_config(config_line);
             QString s = QString("ATV12 has maximum %1 addr").arg(this->ATV12maxNum);
             qDebug() << s;
-        }
     }
   } while (!config_line.isNull());             // последней строки достигли в файле
 config_file.close();                           // закроем конфигурационный файл
