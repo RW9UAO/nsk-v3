@@ -47,7 +47,8 @@ struct data_struct{
     int pca9555_input0, pca9555_input0_previos;
     int pca9555_output1R;
     int pca9555_output1W;
-    int max11616[12], max11616_previos[12];
+    int pca9555ADDR;
+    int max11616[12], max11616_previos[12], max11616ADDR;
     //PID
     double targetPos, Pparam, Dparam, Iparam;
     int nasos[4], nasos_TTW[4];
