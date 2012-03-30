@@ -91,6 +91,9 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > wnd->data.nasos1_wet_alarm_border){
                 wnd->data.nasos[0] = 5;//авария по влажности
             }
+            if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] < 1000){
+                wnd->data.nasos[0] = 6;//авария по обрыву кабеля
+            }
          }
 
         if(wnd->data.nasos2_bit == -1)wnd->data.nasos[1] = 0;//нет насоса
@@ -112,6 +115,9 @@ QThread::msleep(5000);
             }
             if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > wnd->data.nasos2_wet_alarm_border){
                 wnd->data.nasos[1] = 5;//авария по влажности
+            }
+            if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] < 1000){
+                wnd->data.nasos[1] = 6;//авария по обрыву кабеля
             }
         }
 
@@ -135,6 +141,9 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > wnd->data.nasos3_wet_alarm_border){
                 wnd->data.nasos[2] = 5;//авария по влажности
             }
+            if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] < 1000){
+                wnd->data.nasos[2] = 6;//авария по обрыву кабеля
+            }
         }
 
         if(wnd->data.nasos4_bit == -1)wnd->data.nasos[3] = 0;//нет насоса
@@ -156,6 +165,9 @@ QThread::msleep(5000);
             }
             if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > wnd->data.nasos4_wet_alarm_border){
                 wnd->data.nasos[3] = 5;//авария по влажности
+            }
+            if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] < 1000){
+                wnd->data.nasos[3] = 6;//авария по обрыву кабеля
             }
         }
         //обработаем ошибки и выключим моторы
@@ -336,6 +348,18 @@ QThread::msleep(5000);
         //=======================================================================
         // MainWindow в любом случае активно, повесим обработчики на него
         emit changeDataMain();
+        if(wnd->dlgNasos1->isVisible()){
+            emit changeDataNasos1();
+        }
+        if(wnd->dlgNasos2->isVisible()){
+            emit changeDataNasos2();
+        }
+        if(wnd->dlgNasos3->isVisible()){
+            emit changeDataNasos3();
+        }
+        if(wnd->dlgNasos4->isVisible()){
+            emit changeDataNasos4();
+        }
         //ждем 1 секунду (на самом деле чуть больше)
         QThread::msleep(1000);
 
