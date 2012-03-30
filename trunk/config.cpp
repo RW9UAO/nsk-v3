@@ -68,15 +68,10 @@ void MainWindow::set_defaults(void){
     this->data.nasos2_temp_alarm_bit = -1;
     this->data.nasos3_temp_alarm_bit = -1;
     this->data.nasos4_temp_alarm_bit = -1;
-    this->data.nasos1_wet_alarm_bit = -1;
-    this->data.nasos2_wet_alarm_bit = -1;
-    this->data.nasos3_wet_alarm_bit = -1;
-    this->data.nasos4_wet_alarm_bit = -1;
     this->data.nasos1_bit = this->data.nasos2_bit = -1;
     this->data.nasos3_bit = this->data.nasos4_bit = -1;
     this->data.nasos1_current_alarm_border=this->data.nasos2_current_alarm_border=this->data.nasos3_current_alarm_border=this->data.nasos4_current_alarm_border=-1;
     this->data.nasos1_temp_alarm_border=this->data.nasos2_temp_alarm_border=this->data.nasos3_temp_alarm_border=this->data.nasos4_temp_alarm_border=-1;
-    this->data.nasos1_wet_alarm_border=this->data.nasos2_wet_alarm_border=this->data.nasos3_wet_alarm_border=this->data.nasos4_wet_alarm_border=-1;
     this->data.level_input_number=this->data.level_empty_raw=this->data.level_full_raw=this->data.level_full_sm=-1;
     this->data.level_1_bit=this->data.level_2_bit=this->data.level_3_bit=this->data.level_4_bit=-1;
     this->data.level_1_sm=this->data.level_2_sm=this->data.level_3_sm=this->data.level_4_sm=this->data.overlevel_time_to_stop=-1;
@@ -160,7 +155,7 @@ do {
                this->data.level_4_sm = get_double_from_config(config_line);
       }
       if (config_line.contains("overlevel_time_to_stop") ){
-               this->data.level_1_bit = get_double_from_config(config_line);
+               this->data.overlevel_time_to_stop = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos1_bit") ){
                this->data.nasos1_bit = get_double_from_config(config_line);
@@ -199,18 +194,18 @@ do {
                this->data.nasos4_temp_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos1_wet_alarm_border") ){
-               this->data.nasos1_wet_alarm_border = get_double_from_config(config_line);
+        this->data.nasos1_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos2_wet_alarm_border") ){
-               this->data.nasos2_wet_alarm_border = get_double_from_config(config_line);
+        this->data.nasos2_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos3_wet_alarm_border") ){
-               this->data.nasos3_wet_alarm_border = get_double_from_config(config_line);
+        this->data.nasos3_wet_alarm_border = get_double_from_config(config_line);
       }
       if (config_line.contains("nasos4_wet_alarm_border") ){
-          this->data.nasos4_wet_alarm_border = get_double_from_config(config_line);
+        this->data.nasos4_wet_alarm_border = get_double_from_config(config_line);
       }
-    if (config_line.contains("nasos1_current_alarm_bit") ){
+      if (config_line.contains("nasos1_current_alarm_bit") ){
              this->data.nasos1_current_alarm_bit = get_double_from_config(config_line);
     }
     if (config_line.contains("nasos2_current_alarm_bit") ){
@@ -233,18 +228,6 @@ do {
     }
     if (config_line.contains("nasos4_temp_alarm_bit") ){
              this->data.nasos4_temp_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos1_wet_alarm_bit") ){
-             this->data.nasos1_wet_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos2_wet_alarm_bit") ){
-             this->data.nasos2_wet_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos3_wet_alarm_bit") ){
-             this->data.nasos3_wet_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos4_wet_alarm_bit") ){
-             this->data.nasos4_wet_alarm_bit = get_double_from_config(config_line);
     }
       if (config_line.contains("PIDtarget") ){
               this->data.targetPos = get_double_from_config(config_line);
