@@ -26,7 +26,7 @@
     <string>Дискретные PCA9555</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget1">
+  <widget class="QWidget" name="layoutWidget19">
    <property name="enabled">
     <bool>true</bool>
    </property>

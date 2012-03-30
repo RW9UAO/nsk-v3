@@ -28,7 +28,7 @@ void Thread_I2C::run() {
     // вот тут опрос
     while(wnd->done){
 //опросим дискретный ввод/вывод
-      if(wnd->is21){
+      if(wnd->data.is21){
         //file.setFileName("/sys/bus/i2c/devices/1-0021/name");
           file.setFileName(QString("/sys/bus/i2c/devices/%1-0021/name").arg(wnd->data.pca9555ADDR) );
         in.setDevice(&file);
@@ -53,7 +53,10 @@ void Thread_I2C::run() {
 //                qDebug() << s;
                 file.close();
             }else{
-                qCritical("error open /sys/bus/i2c/devices/x-0021/input0");
+                if( (wnd->data.error_flags & ERROR_21) == 0 ){
+                    qCritical("error open /sys/bus/i2c/devices/x-0021/input0");
+                    wnd->data.error_flags |= ERROR_21;
+                }
                 wnd->data.pca9555_input0 = -1;
             }
             //file.setFileName("/sys/bus/i2c/devices/1-0021/input1");
@@ -73,19 +76,28 @@ void Thread_I2C::run() {
                         out << QString("%1").arg(wnd->data.pca9555_output1W);
                         file.close();
                     }else{
-                        qCritical("error open /sys/bus/i2c/devices/x-0021/output1");
+                        if( (wnd->data.error_flags & ERROR_21) == 0 ){
+                            qCritical("error open /sys/bus/i2c/devices/x-0021/output1");
+                            wnd->data.error_flags |= ERROR_21;
+                        }
                     }
                 }
             }else{
-                qCritical("error open /sys/bus/i2c/devices/x-0021/input1");
+                if( (wnd->data.error_flags & ERROR_21) == 0 ){
+                    qCritical("error open /sys/bus/i2c/devices/x-0021/input1");
+                    wnd->data.error_flags |= ERROR_21;
+                }
                 wnd->data.pca9555_output1R = -1;
             }
         }else{
-            qCritical("error open /sys/bus/i2c/devices/x-0021/name");
+            if( (wnd->data.error_flags & ERROR_21) == 0 ){
+                qCritical("error open /sys/bus/i2c/devices/x-0021/name");
+                wnd->data.error_flags |= ERROR_21;
+             }
         }
       }
 //опросим аналоговый вход
-      if(wnd->is35){
+      if(wnd->data.is35){
         //file.setFileName("/sys/bus/i2c/devices/0-0035/name");
           file.setFileName(QString("/sys/bus/i2c/devices/%1-0035/name").arg(wnd->data.max11616ADDR));
         in.setDevice(&file);// создадим поток для чтения
@@ -109,7 +121,10 @@ void Thread_I2C::run() {
                     //}
                     //wnd->data.max11616_previos[i] = temp;
                 }else{
+                if( (wnd->data.error_flags & ERROR_35) == 0 ){
                     qCritical() << "error open " << filename;
+                    wnd->data.error_flags |= ERROR_35;
+                 }
                     wnd->data.max11616[i] = -1;
                 }
                 file.close();
@@ -119,7 +134,10 @@ void Thread_I2C::run() {
 //                        .arg(wnd->data.max11616[6]).arg(wnd->data.max11616[7]).arg(wnd->data.max11616[8]).arg(wnd->data.max11616[9])
 //                        .arg(wnd->data.max11616[10]).arg(wnd->data.max11616[11]);
         }else{
-            qCritical("error open /sys/bus/i2c/devices/x-0035/name");
+            if( (wnd->data.error_flags & ERROR_35) == 0 ){
+                qCritical("error open /sys/bus/i2c/devices/x-0035/name");
+                wnd->data.error_flags |= ERROR_35;
+             }
         }
     }
 //обновим показания диалога I2C

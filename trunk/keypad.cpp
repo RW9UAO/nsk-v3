@@ -21,6 +21,9 @@ Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), 
     case 4:
         dui->label->setText("Введите пароль");
         dui->lineEdit->setEchoMode(QLineEdit::Password);
+    case 5:
+        dui->label->setText("Если нет - введите 0\nесли есть - любую цифру");
+        break;
     default:
         //this->close();
         dui->label->setText("");

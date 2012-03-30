@@ -10,8 +10,10 @@ DialogService::DialogService(data_struct * d, QWidget *parent) : QDialog(parent)
 
     if(this->data->servicemode){
         dui->label->setText("Сервисный режим включен");
+        dui->pushButton->show();
     }else{
         dui->label->setText("Режим оператора");
+        dui->pushButton->hide();
     }
 }
 
@@ -48,4 +50,8 @@ void DialogService::on_ButtonEnterService_clicked(){
             dui->label->setText("Неправильный пароль");
         }
     }
+}
+void DialogService::on_pushButton_clicked(){
+    this->data->tempstr = "killall";
+    this->close();
 }

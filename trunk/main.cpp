@@ -44,7 +44,7 @@ void installLog(){
     if(logFile->open(QFile::WriteOnly | QIODevice::Append | QIODevice::Unbuffered))
         logStream = new QTextStream(logFile);
 
-    logStream->setCodec("utf-8");
+    //logStream->setCodec("utf-8");
 
 // Запись заголовка с информацией о запуске
     if(logStream && logStream->device()){
