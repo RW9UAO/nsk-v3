@@ -22,6 +22,7 @@
 #include "dialogSetup.h"
 #include "dialogSetupGeneral.h"
 #include "keypad.h"
+#include "dialogCalibr.h"
 #include "data_struct.h"
 
 namespace Ui {
@@ -54,6 +55,7 @@ public:
     std::auto_ptr<DialogService> dlgService;
     std::auto_ptr<DialogSetup> dlgSetup;
     std::auto_ptr<DialogSetupGeneral> dlgSetupGeneral;
+    std::auto_ptr<DialogCalibr> dlgCalibr;
 
     data_struct data;
     bool done;
@@ -83,6 +85,7 @@ public slots:
     void onDataChangeNasos2();
     void onDataChangeNasos3();
     void onDataChangeNasos4();
+    void onDataChangeCalibr();
     //void MyEventHandler();
 };
 

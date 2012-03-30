@@ -124,6 +124,10 @@ int main(int argc, char *argv[]){
                 &t3, SIGNAL(changeDataI2C()),
                 &w, SLOT(onDataChangeI2C()),
                 Qt::QueuedConnection);
+    QObject::connect(
+                &t3, SIGNAL(changeDataCalibr()),
+                &w, SLOT(onDataChangeCalibr()),
+                Qt::QueuedConnection);
 //запустим потоки
     t.init();//инициализация переменных
     t.start(QThread::LowPriority);

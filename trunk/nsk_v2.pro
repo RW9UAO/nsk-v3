@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     keypad.cpp \
     dialogService.cpp \
     dialogSetup.cpp \
-    dialogSetupGeneral.cpp
+    dialogSetupGeneral.cpp \
+    dialogCalibr.cpp
 
 HEADERS  += mainwindow.h \
     thread_485.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     keypad.h \
     dialogService.h \
     dialogSetup.h \
-    dialogSetupGeneral.h
+    dialogSetupGeneral.h \
+    dialogCalibr.h
 
 FORMS    += mainwindow.ui \
     dialogATV12.ui \
@@ -62,7 +64,8 @@ FORMS    += mainwindow.ui \
     keypad.ui \
     dialogService.ui \
     dialogSetup.ui \
-    dialogSetupGeneral.ui
+    dialogSetupGeneral.ui \
+    dialogCalibr.ui
 
 DEFINES += APP_VERSION=$$VERSION
 
