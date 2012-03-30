@@ -8,6 +8,7 @@ DialogCalibr::DialogCalibr(data_struct * d, QWidget *parent) : QDialog(parent), 
     dui->setupUi(this);
     this->data = d;
     dui->i2c_raw->setText(QString("%1").arg(this->data->max11616[this->data->level_input_number]));
+    dui->i2c_raw_2->setText(QString("%1").arg(this->data->max11616[this->data->level_input_number]));
     dui->empty_raw->setText(QString("%1").arg(this->data->level_empty_raw));
     dui->full_raw->setText(QString("%1").arg(this->data->level_full_raw));
     dui->pushButton_4->setText(QString("%1").arg(this->data->nasos1_bit));

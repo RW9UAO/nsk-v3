@@ -29,7 +29,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -256,13 +256,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
        <width>121</width>
-       <height>111</height>
+       <height>128</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
@@ -324,13 +324,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>140</x>
        <y>20</y>
        <width>124</width>
-       <height>111</height>
+       <height>128</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
@@ -392,13 +392,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>140</y>
        <width>130</width>
-       <height>51</height>
+       <height>62</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
@@ -432,13 +432,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>160</x>
        <y>141</y>
        <width>130</width>
-       <height>51</height>
+       <height>62</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
@@ -488,6 +488,32 @@
      </property>
      <property name="text">
       <string>Калибровка алармов насосов</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>показания уровня</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="i2c_raw_2">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>40</y>
+       <width>59</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
      </property>
     </widget>
    </widget>
