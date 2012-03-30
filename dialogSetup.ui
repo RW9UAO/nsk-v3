@@ -35,7 +35,7 @@
     <string notr="true">background-image: url(none);</string>
    </property>
    <property name="text">
-    <string>Глагнэ</string>
+    <string>Главная</string>
    </property>
   </widget>
   <widget class="QPushButton" name="P4">

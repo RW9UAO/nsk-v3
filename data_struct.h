@@ -11,7 +11,23 @@
 
 // глобальные переменные, задаем и обрабатываем в разных потоках
 struct data_struct{
-    bool dlgCE303isVisible;
+    unsigned int error_flags;
+#define ERROR_ATV12_1 1<<0
+#define ERROR_ATV12_2 1<<1
+#define ERROR_ATV12_3 1<<2
+#define ERROR_ATV12_4 1<<3
+#define ERROR_CE303 1<<4
+#define ERROR_21 1<<5
+#define ERROR_35 1<<6
+#define ERROR_LEVEL_METER 1<<7
+#define ALARM_OVERLEVE 1<<8
+    bool isATV12;// частотник есть?
+    unsigned char ATV12maxNum;//частотник последний номер, не больше 6-ти
+    bool isSoftStart;//плавный пуск есть?
+    bool isCE303;//счетчик есть? а если найду?
+    bool is21;
+    bool is35;
+    bool islevel_meter;//наличие датчика уровня на I2C
     QString tempstr;//переменная для обмена с диалогами
     int dialogparam;//передадим параметр в диалог
     bool servicemode;//сервисный режим, доступ к настройкам

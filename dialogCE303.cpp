@@ -17,14 +17,12 @@ DialogCE303::DialogCE303(data_struct * d, QWidget *parent) : QDialog(parent), du
         dui->pushButton_2->setDisabled(true);
         dui->pushButton_3->setDisabled(true);
     }
-    this->data->dlgCE303isVisible = this->isVisible();
 }
 
 DialogCE303::~DialogCE303(){
     delete dui;
 }
 void DialogCE303::MyEventHandler(){
-    this->data->dlgCE303isVisible = this->isVisible();
     this->close();
 }
 
@@ -117,5 +115,4 @@ void DialogCE303::on_pushButton_3_clicked(){
         //qDebug()<< QString("%1").arg(this->data->tempstr);
         this->data->CE303needupdate = update_trans;
     }
-
 }

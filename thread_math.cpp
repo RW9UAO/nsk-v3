@@ -73,7 +73,7 @@ QThread::msleep(5000);
         else{
             wnd->data.nasos[0] = 1;//не включен, готов
             //если есть частотник, сделаем вывод о включенности по команде "start"
-            if(wnd->isATV12){
+            if(wnd->data.isATV12){
                 if(wnd->data.ATV12status[0] == RUN)
                     wnd->data.nasos[0] = 2;//включен, работает
             }else{
@@ -96,7 +96,7 @@ QThread::msleep(5000);
         if(wnd->data.nasos2_bit == -1)wnd->data.nasos[1] = 0;//нет насоса
         else{
             wnd->data.nasos[1] = 1;//не включен, готов
-            if(wnd->isATV12){
+            if(wnd->data.isATV12){
                 if(wnd->data.ATV12status[1] == RUN)
                     wnd->data.nasos[1] = 2;//включен, работает
             }else{
@@ -118,7 +118,7 @@ QThread::msleep(5000);
         if(wnd->data.nasos3_bit == -1)wnd->data.nasos[2] = 0;//нет насоса
         else{
             wnd->data.nasos[2] = 1;//не включен, готов
-            if(wnd->isATV12){
+            if(wnd->data.isATV12){
                 if(wnd->data.ATV12status[2] == RUN)
                     wnd->data.nasos[2] = 2;//включен, работает
             }else{
@@ -140,7 +140,7 @@ QThread::msleep(5000);
         if(wnd->data.nasos4_bit == -1)wnd->data.nasos[3] = 0;//нет насоса
         else{
             wnd->data.nasos[3] = 1;//не включен, готов
-            if(wnd->isATV12){
+            if(wnd->data.isATV12){
                 if(wnd->data.ATV12status[3] == RUN)
                     wnd->data.nasos[3] = 2;//включен, работает
             }else{
@@ -179,7 +179,7 @@ QThread::msleep(5000);
         }
 
         //обработка уровней
-       if(wnd->islevel_meter){
+       if(wnd->data.islevel_meter){
         //датчик уровня
          if(wnd->data.max11616[wnd->data.level_input_number] == -1 ||                                              //АЦП не отвечает
             wnd->data.max11616[wnd->data.level_input_number] >= 3500 ||                                         //датчик в КЗ
@@ -191,7 +191,10 @@ QThread::msleep(5000);
                 //стоп моторам
                 wnd->data.motor_need_to_stop = true;
                 wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
-                qCritical()<< QString("level meter alarm %1").arg(wnd->data.max11616[wnd->data.level_input_number]);
+                if((wnd->data.error_flags & ERROR_LEVEL_METER)==0){
+                    wnd->data.error_flags |= ERROR_LEVEL_METER;
+                    qCritical()<< QString("level meter alarm %1").arg(wnd->data.max11616[wnd->data.level_input_number]);
+                 }
                }else{
                 wnd->data.level_to_show = 1;//уровнемер отвалился, перелива пока нет
                }
@@ -298,7 +301,7 @@ QThread::msleep(5000);
         if(wnd->data.motor_need_to_stop == true){
             if(wnd->data.time_to_stop == -1 || //время плавной остановки в конфиге не задано. тупо тормозим
                wnd->data.time_to_stop == 0 ){//пришло время остановки
-                if(wnd->isATV12){//частотникам пошлем команду
+                if(wnd->data.isATV12){//частотникам пошлем команду
                     wnd->data.stop[0]=wnd->data.stop[1]=wnd->data.stop[2]=wnd->data.stop[3] = true;
                     wnd->data.start[0]=wnd->data.start[1]=wnd->data.start[2]=wnd->data.start[3]=false;
                 }else{//ппуски просто отключаем пускателями

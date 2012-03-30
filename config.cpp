@@ -18,16 +18,17 @@
 
 //void Thread_485::set_defaults(void){
 void MainWindow::set_defaults(void){
-    //this->data.servicemode = false;
-    this->data.servicemode = true;
+    this->data.servicemode = false;
+    //this->data.servicemode = true;
+    this->data.error_flags = 0;
     this->data.KNSnumber = "123";
-    this->isATV12 = true;        //по умолчанию включим 4-ре частотника и счетчик
-    this->isSoftStart = false;
-    this->ATV12maxNum = 4;
-    this->isCE303 = true;
-    this->is21 = true;
-    this->is35 = true;
-    this->islevel_meter = true;
+    this->data.isATV12 = true;        //по умолчанию включим 4-ре частотника и счетчик
+    this->data.isSoftStart = false;
+    this->data.ATV12maxNum = 4;
+    this->data.isCE303 = true;
+    this->data.is21 = true;
+    this->data.is35 = true;
+    this->data.islevel_meter = true;
     for(int i = 0; i < 6; i++){
             this->data.current[i] = -1;
             this->data.freq[i] = -1;
@@ -116,10 +117,10 @@ do {
       }
       if (config_line.contains("level_meter") ){
           if (config_line.contains("yes") ){
-                  this->islevel_meter = true;
+                  this->data.islevel_meter = true;
                   qDebug("I2C level meter include");
           }else{
-                  this->islevel_meter = false;
+                  this->data.islevel_meter = false;
           }
       }
       if (config_line.contains("level_input_number") ){
@@ -263,47 +264,47 @@ do {
       }
       if (config_line.contains("PCA9555") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
-              this->is21 = true;
+              this->data.is21 = true;
               qDebug("PCA9555 include");
           }else{
-              this->is21 = false;   // иначе выключено
+              this->data.is21 = false;   // иначе выключено
           }
       }
       if (config_line.contains("MAX11616") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
-              this->is35 = true;
+              this->data.is35 = true;
               qDebug("MAX11616 include");
           }else{
-              this->is35 = false;   // иначе выключено
+              this->data.is35 = false;   // иначе выключено
           }
       }
     if (config_line.contains("ATV12") ){   // сравним с нужным параметром
         if (config_line.contains("yes") ){ // включено?
-            this->isATV12 = true;
+            this->data.isATV12 = true;
             qDebug("ATV12 include");
         }else{
-            this->isATV12 = false;   // иначе выключено
+            this->data.isATV12 = false;   // иначе выключено
         }
     }
     if (config_line.contains("CE303") ){
         if (config_line.contains("yes") ){
-            this->isCE303 = true;
+            this->data.isCE303 = true;
             qDebug("CE303 include");
         }else{
-            this->isCE303 = false;
+            this->data.isCE303 = false;
          }
     }
     if (config_line.contains("ATS12") ){
         if (config_line.contains("yes") ){
-                this->isSoftStart = true;
+                this->data.isSoftStart = true;
                 qDebug("SoftStart include");
         }else{
-                this->isSoftStart = false;
+                this->data.isSoftStart = false;
         }
     }
     if (config_line.contains("MAXDEV") ){
-            this->ATV12maxNum = get_double_from_config(config_line);
-            QString s = QString("ATV12 has maximum %1 addr").arg(this->ATV12maxNum);
+            this->data.ATV12maxNum = get_double_from_config(config_line);
+            QString s = QString("ATV12 has maximum %1 addr").arg(this->data.ATV12maxNum);
             qDebug() << s;
     }
   } while (!config_line.isNull());             // последней строки достигли в файле

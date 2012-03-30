@@ -20,6 +20,7 @@
 #include "dialogNasos4.h"
 #include "dialogService.h"
 #include "dialogSetup.h"
+#include "dialogSetupGeneral.h"
 #include "keypad.h"
 #include "data_struct.h"
 
@@ -40,14 +41,6 @@ public:
 
     Ui::MainWindow *ui;
 
-    bool isATV12;// частотник есть?
-    unsigned char ATV12maxNum;//частотник последний номер, не больше 6-ти
-    bool isSoftStart;//плавный пуск есть?
-    bool isCE303;//счетчик есть? а если найду?
-    bool is21;
-    bool is35;
-    bool islevel_meter;//наличие датчика уровня на I2C
-
     std::auto_ptr<DialogATV12> dlgATV12;
     std::auto_ptr<DialogCE303> dlgCE303;
     std::auto_ptr<DialogI2C> dlgI2C;
@@ -60,6 +53,7 @@ public:
     std::auto_ptr<Dialogkeypad> dlgkeypad;
     std::auto_ptr<DialogService> dlgService;
     std::auto_ptr<DialogSetup> dlgSetup;
+    std::auto_ptr<DialogSetupGeneral> dlgSetupGeneral;
 
     data_struct data;
     bool done;
@@ -76,6 +70,8 @@ private slots:
     void on_Nasos4_clicked();
     void on_setup_clicked();
     void on_service_clicked();
+
+    void on_pushButton_clicked();
 
 public slots:
     void onDataChangeATV12();
