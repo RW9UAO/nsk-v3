@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
     /*QObject::connect(
                 &t2, SIGNAL(changeDataPower()),
                 &w, SLOT(onDataChangePower()),
-                Qt::QueuedConnection);
+                Qt::QueuedConnection);*/
     QObject::connect(
                 &t2, SIGNAL(changeDataNasos1()),
                 &w, SLOT(onDataChangeNasos1()),
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
     QObject::connect(
                 &t2, SIGNAL(changeDataNasos4()),
                 &w, SLOT(onDataChangeNasos4()),
-                Qt::QueuedConnection);*/
+                Qt::QueuedConnection);
     QObject::connect(
                 &t3, SIGNAL(changeDataI2C()),
                 &w, SLOT(onDataChangeI2C()),

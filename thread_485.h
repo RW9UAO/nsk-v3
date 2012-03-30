@@ -34,6 +34,7 @@ private:
 signals:
         void changeDataATV12();
         void changeDataCE303();
+        void changeDataNasos1();
 
 private:
         Ui::MainWindow *ui;

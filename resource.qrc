@@ -37,5 +37,10 @@
         <file>pict/fazared.gif</file>
         <file>pict/fazagreen.gif</file>
         <file>pict/ustanovki_fon.gif</file>
+        <file>pict/nasos_fon_rab.gif</file>
+        <file>pict/nasos_fon_rezerv.gif</file>
+        <file>pict/nasosred_k.gif</file>
+        <file>pict/datchik_green.gif</file>
+        <file>pict/datchik_red.gif</file>
     </qresource>
 </RCC>

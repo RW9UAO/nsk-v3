@@ -17,6 +17,10 @@ signals:
 //        void changeDataATV12();
 //        void changeDataCE303();
         void changeDataMain();
+        void changeDataNasos1();
+        void changeDataNasos2();
+        void changeDataNasos3();
+        void changeDataNasos4();
 
 private:
         Ui::MainWindow *ui;
