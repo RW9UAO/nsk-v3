@@ -61,13 +61,9 @@ nasos3_temp_alarm_bit 6
 nasos3_temp_alarm_border 2000
 nasos4_temp_alarm_bit 7
 nasos4_temp_alarm_border 2000
-nasos1_wet_alarm_bit 4
 nasos1_wet_alarm_border 4000
-nasos2_wet_alarm_bit 5
 nasos2_wet_alarm_border 4000
-nasos3_wet_alarm_bit 6
 nasos3_wet_alarm_border 4000
-nasos4_wet_alarm_bit 7
 nasos4_wet_alarm_border 4000
 
 # есть ли датчик уровня

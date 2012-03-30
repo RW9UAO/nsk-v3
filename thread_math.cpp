@@ -88,7 +88,7 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > wnd->data.nasos1_temp_alarm_border){
                 wnd->data.nasos[0] = 4;////авария по температуре
             }
-            if(wnd->data.max11616[wnd->data.nasos1_wet_alarm_bit] > wnd->data.nasos1_wet_alarm_border){
+            if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > wnd->data.nasos1_wet_alarm_border){
                 wnd->data.nasos[0] = 5;//авария по влажности
             }
          }
@@ -110,7 +110,7 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > wnd->data.nasos2_temp_alarm_border){
                 wnd->data.nasos[1] = 4;////авария по температуре
             }
-            if(wnd->data.max11616[wnd->data.nasos2_wet_alarm_bit] > wnd->data.nasos2_wet_alarm_border){
+            if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > wnd->data.nasos2_wet_alarm_border){
                 wnd->data.nasos[1] = 5;//авария по влажности
             }
         }
@@ -132,7 +132,7 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > wnd->data.nasos3_temp_alarm_border){
                 wnd->data.nasos[2] = 4;////авария по температуре
             }
-            if(wnd->data.max11616[wnd->data.nasos3_wet_alarm_bit] > wnd->data.nasos3_wet_alarm_border){
+            if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > wnd->data.nasos3_wet_alarm_border){
                 wnd->data.nasos[2] = 5;//авария по влажности
             }
         }
@@ -154,7 +154,7 @@ QThread::msleep(5000);
             if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > wnd->data.nasos4_temp_alarm_border){
                 wnd->data.nasos[3] = 4;////авария по температуре
             }
-            if(wnd->data.max11616[wnd->data.nasos4_wet_alarm_bit] > wnd->data.nasos4_wet_alarm_border){
+            if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > wnd->data.nasos4_wet_alarm_border){
                 wnd->data.nasos[3] = 5;//авария по влажности
             }
         }

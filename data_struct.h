@@ -71,7 +71,6 @@ struct data_struct{
     int nasos1_bit, nasos2_bit, nasos3_bit, nasos4_bit;
     int nasos1_current_alarm_bit,nasos2_current_alarm_bit,nasos3_current_alarm_bit,nasos4_current_alarm_bit;
     int nasos1_temp_alarm_bit,nasos2_temp_alarm_bit,nasos3_temp_alarm_bit,nasos4_temp_alarm_bit;
-    int nasos1_wet_alarm_bit,nasos2_wet_alarm_bit,nasos3_wet_alarm_bit,nasos4_wet_alarm_bit;
     int nasos1_current_alarm_border,nasos2_current_alarm_border,nasos3_current_alarm_border,nasos4_current_alarm_border;
     int nasos1_temp_alarm_border,nasos2_temp_alarm_border,nasos3_temp_alarm_border,nasos4_temp_alarm_border;
     int nasos1_wet_alarm_border,nasos2_wet_alarm_border,nasos3_wet_alarm_border,nasos4_wet_alarm_border;
