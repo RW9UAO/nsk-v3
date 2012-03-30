@@ -15,6 +15,7 @@ public:
 
 signals:
           void changeDataI2C();
+          void changeDataCalibr();
 
 private:
         Ui::MainWindow *ui;
