@@ -83,20 +83,18 @@ void MainWindow::set_defaults(void){
     this->data.nasos_param_index[1] = 3;
     this->data.nasos_param_index[2] = 11;
     this->data.nasos_param_index[3] = 12;
-
+//получим список файлов с артикулами из папки ./bd
     QFile config_file;// имя конфигурационного файла
     QTextStream config_in;
     QStringList files = QDir("./bd").entryList(QStringList() << "*.art", QDir::Files); // получаем список файлов в текущей папке
     for(int i=0;i<files.size();i++){ // перебираем все эти файлы
-        if(i == 11) break;
+        if(i == 11) break;//если файлов больше 11, то они к нам не влезут.
         //qDebug() << QString("%1").arg(files[i]);
         qDebug() << files[i];
         config_file.setFileName("./bd/"+files[i]);
         config_in.setDevice(&config_file);// создадим поток для чтения
-        if (config_file.open(QIODevice::ReadOnly) ){
-        }else{
-            qDebug() << QString("error open %1").arg(files[i]);
-        }
+        config_file.open(QIODevice::ReadOnly);// откроем файл артикула
+        //и построчно считаем его
         this->data.nasos_param[i].name = config_in.readLine();
         this->data.nasos_param[i].articul = config_in.readLine();
         this->data.nasos_param[i].pressure = config_in.readLine().toInt();

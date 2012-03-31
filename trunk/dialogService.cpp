@@ -20,9 +20,6 @@ DialogService::DialogService(data_struct * d, QWidget *parent) : QDialog(parent)
 DialogService::~DialogService(){
     delete dui;
 }
-void DialogService::MyEventHandler(){
-    this->close();
-}
 // обновим содержимое диалога
 void DialogService::updateDataService(){
 }
@@ -36,7 +33,8 @@ void DialogService::on_ButtonEnterService_clicked(){
     pos.setX(0);    pos.setY(0);    d_key->move(pos);
     d_key->exec();// покажем диалог
     if(this->data->tempstr.size() > 1){//если юзер что-то ввел
-        qDebug()<< QString("%1").arg(this->data->tempstr);
+        //qDebug()<< QString("%1").arg(this->data->tempstr);
+        //сравнение введенного пароля и номера КНС
         if(this->data->tempstr[0] == this->data->KNSnumber[0] &&
             this->data->tempstr[1] == this->data->KNSnumber[1] &&
             this->data->tempstr[2] == this->data->KNSnumber[2] &&
@@ -51,7 +49,8 @@ void DialogService::on_ButtonEnterService_clicked(){
         }
     }
 }
+//кнопка завершения программы
 void DialogService::on_pushButton_clicked(){
-    this->data->tempstr = "killall";
+    this->data->tempstr = "killall";//попросим вызывавшего нас тоже завершиться
     this->close();
 }

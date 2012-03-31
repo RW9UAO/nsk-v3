@@ -22,8 +22,6 @@ private:
     Ui::DialogService *dui;
     data_struct * data;
 
-public slots:
-    void MyEventHandler();
 private slots:
     void on_ButtonEnterService_clicked();
     void on_pushButton_clicked();

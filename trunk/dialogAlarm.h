@@ -21,8 +21,7 @@ private:
     Ui::DialogAlarm *dui;
     data_struct * data;
 
-public slots:
-    void MyEventHandler();
 private slots:
+    void on_pushButton_clicked();
 };
 #endif // DIALOGALARM_H
