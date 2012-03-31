@@ -80,6 +80,18 @@ struct data_struct{
     bool motor_need_to_stop;
     int time_to_stop;
     int level_to_show, level_to_show_sm;
+    int nasos_param_index[4];
+    struct n_param{
+        QString name;
+        QString articul;
+        int pressure;
+        int volume;
+        int current;
+        int rpm;
+        QString starttype;
+        QString cable;
+        QString pictname;
+    }nasos_param[11];
 };
 
 #endif // DATA_STRUCT_H

@@ -25,5 +25,7 @@ private:
 public slots:
     void MyEventHandler();
 private slots:
+    void on_pushButton_2_clicked();
+    void on_pushButton_clicked();
 };
 #endif // DIALOGNASOS1_H
