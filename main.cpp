@@ -35,7 +35,7 @@ static const char* msgType[] ={
 void customMessageHandler(QtMsgType type, const char* msg){
     std::cout << msgType[type] << msg << std::endl;
     if(logStream && logStream->device()){
-        *logStream << msgType[type] << msg << endl;
+        *logStream << msgType[type] << QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss") << " "<< msg << endl;
     }
 }
 // Создание файла для логов

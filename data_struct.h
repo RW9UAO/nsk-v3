@@ -21,6 +21,7 @@ struct data_struct{
 #define ERROR_35 1<<6
 #define ERROR_LEVEL_METER 1<<7
 #define ALARM_OVERLEVE 1<<8
+#define ALARM_220 1<<9
     bool isATV12;// частотник есть?
     unsigned char ATV12maxNum;//частотник последний номер, не больше 6-ти
     bool isSoftStart;//плавный пуск есть?

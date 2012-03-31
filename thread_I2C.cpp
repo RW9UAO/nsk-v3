@@ -22,7 +22,7 @@ void Thread_I2C::run() {
     QFile file;
     QTextStream in, out;
     QString line;
-    qDebug() << "Thread_I2C::run";
+//    qDebug() << "Thread_I2C::run";
 
 
     // вот тут опрос
@@ -157,7 +157,7 @@ void Thread_I2C::run() {
 //--------------------------------------------------------------------------------------
 void Thread_I2C::quit(){
     wnd->done = false;
-    qDebug() << "Thread_I2C::quit";
+//    qDebug() << "Thread_I2C::quit";
 }
 
 

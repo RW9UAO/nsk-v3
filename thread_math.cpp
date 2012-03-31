@@ -23,7 +23,7 @@ void Thread_math::run() {
 //    double currentPos, LastPosition = 0, IntegratedError = 0, G_Dt;
 //    double result = 0;
 
-    qDebug() << "Thread_math::run";
+//    qDebug() << "Thread_math::run";
 //    qDebug() << QString("PID using: target %1, P %2 I %3 D %4").arg().arg();
 //подождем пока I2C поток запустится и даст данные
 QThread::msleep(5000);
@@ -211,7 +211,12 @@ QThread::msleep(5000);
                 wnd->data.level_to_show = 1;//уровнемер отвалился, перелива пока нет
                }
          }else{
-           wnd->data.level_to_show_sm = (double)(wnd->data.level_full_sm * (wnd->data.max11616[wnd->data.level_input_number] - wnd->data.level_empty_raw)) / wnd->data.level_full_raw;
+             //вычислим уровень в сантиметрах
+             double a = (double)wnd->data.max11616[wnd->data.level_input_number] - (double)wnd->data.level_empty_raw;
+             double b = a * (double)wnd->data.level_full_sm;
+             double c = b / (double)wnd->data.level_full_raw;
+             wnd->data.level_to_show_sm = c;
+           //wnd->data.level_to_show_sm = (double)(wnd->data.level_full_sm * (wnd->data.max11616[wnd->data.level_input_number] - wnd->data.level_empty_raw)) / wnd->data.level_full_raw;
            if(wnd->data.level_to_show_sm < wnd->data.level_1_sm){
                wnd->data.level_to_show = 2;
            }
@@ -382,7 +387,7 @@ QThread::msleep(5000);
 //--------------------------------------------------------------------------------------
 void Thread_math::quit(){
     wnd->done = false;
-    qDebug() << "Thread_math::quit";
+    //qDebug() << "Thread_math::quit";
 }
 
 
