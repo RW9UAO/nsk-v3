@@ -23,6 +23,7 @@
 #include "dialogSetupGeneral.h"
 #include "keypad.h"
 #include "dialogCalibr.h"
+#include "dialogNasosParameter.h"
 #include "data_struct.h"
 
 namespace Ui {

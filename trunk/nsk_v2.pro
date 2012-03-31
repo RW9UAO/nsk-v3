@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     dialogService.cpp \
     dialogSetup.cpp \
     dialogSetupGeneral.cpp \
-    dialogCalibr.cpp
+    dialogCalibr.cpp \
+    dialogNasosParamerer.cpp
 
 HEADERS  += mainwindow.h \
     thread_485.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     dialogService.h \
     dialogSetup.h \
     dialogSetupGeneral.h \
-    dialogCalibr.h
+    dialogCalibr.h \
+    dialogNasosParameter.h
 
 FORMS    += mainwindow.ui \
     dialogATV12.ui \
@@ -65,7 +67,8 @@ FORMS    += mainwindow.ui \
     dialogService.ui \
     dialogSetup.ui \
     dialogSetupGeneral.ui \
-    dialogCalibr.ui
+    dialogCalibr.ui \
+    dialogNasosParameter.ui
 
 DEFINES += APP_VERSION=$$VERSION
 
