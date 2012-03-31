@@ -351,7 +351,7 @@ QThread::msleep(5000);
         if(wnd->dlgNasos1->isVisible()){
             emit changeDataNasos1();
         }
-        if(wnd->dlgNasos2->isVisible()){
+/*        if(wnd->dlgNasos2->isVisible()){
             emit changeDataNasos2();
         }
         if(wnd->dlgNasos3->isVisible()){
@@ -359,7 +359,7 @@ QThread::msleep(5000);
         }
         if(wnd->dlgNasos4->isVisible()){
             emit changeDataNasos4();
-        }
+        }*/
         //ждем 1 секунду (на самом деле чуть больше)
         QThread::msleep(1000);
 

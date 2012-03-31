@@ -7,6 +7,7 @@ DialogNasosParameter::DialogNasosParameter(data_struct * d, QWidget *parent) : Q
     dui->setupUi(this);
     this->data = d;
     if(this->data->dialogparam < 0 || this->data->dialogparam > 3) return;
+    dui->label_8->setText(QString("Насос %1").arg(this->data->dialogparam + 1));
     if(this->data->servicemode){
         //если включен сервисный режим покажем все варианты насосов
         for(int i = 0; i < 11; i++){
@@ -15,6 +16,7 @@ DialogNasosParameter::DialogNasosParameter(data_struct * d, QWidget *parent) : Q
      }else{
         dui->comboBox->addItem(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].name);
         dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].pictname) ));
+        dui->label_9->setText(QString("арт %1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].articul));
     }
 }
 

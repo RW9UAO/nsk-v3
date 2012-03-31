@@ -15,9 +15,6 @@
 #include "dialogPower.h"
 #include "dialogAlarm.h"
 #include "dialogNasos1.h"
-#include "dialogNasos2.h"
-#include "dialogNasos3.h"
-#include "dialogNasos4.h"
 #include "dialogService.h"
 #include "dialogSetup.h"
 #include "dialogSetupGeneral.h"
@@ -49,9 +46,6 @@ public:
     std::auto_ptr<DialogPower> dlgPower;
     std::auto_ptr<DialogAlarm> dlgAlarm;
     std::auto_ptr<DialogNasos1> dlgNasos1;
-    std::auto_ptr<DialogNasos2> dlgNasos2;
-    std::auto_ptr<DialogNasos3> dlgNasos3;
-    std::auto_ptr<DialogNasos4> dlgNasos4;
     std::auto_ptr<Dialogkeypad> dlgkeypad;
     std::auto_ptr<DialogService> dlgService;
     std::auto_ptr<DialogSetup> dlgSetup;
@@ -83,9 +77,9 @@ public slots:
     void onDataChangeMain();
     void onDataChangePower();
     void onDataChangeNasos1();
-    void onDataChangeNasos2();
-    void onDataChangeNasos3();
-    void onDataChangeNasos4();
+//    void onDataChangeNasos2();
+//    void onDataChangeNasos3();
+//    void onDataChangeNasos4();
     void onDataChangeCalibr();
     //void MyEventHandler();
 };

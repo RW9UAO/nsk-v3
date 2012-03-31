@@ -20,9 +20,6 @@ SOURCES += main.cpp\
     dialogI2C.cpp \
     dialogPower.cpp \
     dialogAlarm.cpp \
-    dialogNasos4.cpp \
-    dialogNasos3.cpp \
-    dialogNasos2.cpp \
     dialogNasos1.cpp \
     config.cpp \
     keypad.cpp \
@@ -43,9 +40,6 @@ HEADERS  += mainwindow.h \
     dialogPower.h \
     dialogAlarm.h \
     dialogNasos1.h \
-    dialogNasos4.h \
-    dialogNasos3.h \
-    dialogNasos2.h \
     keypad.h \
     dialogService.h \
     dialogSetup.h \
@@ -60,9 +54,6 @@ FORMS    += mainwindow.ui \
     dialogPower.ui \
     dialogAlarm.ui \
     dialogNasos1.ui \
-    dialogNasos2.ui \
-    dialogNasos3.ui \
-    dialogNasos4.ui \
     keypad.ui \
     dialogService.ui \
     dialogSetup.ui \
