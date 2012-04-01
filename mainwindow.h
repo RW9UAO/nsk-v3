@@ -8,6 +8,8 @@
 #include <QMainWindow>
 
 #include <memory>
+#include <QObject>
+#include <QMap>
 
 #include "dialogATV12.h"
 #include "dialogI2C.h"
@@ -36,6 +38,11 @@ public:
     void updateDataMain();
     void set_defaults(void);
     void read_config(void);
+    void save_config(void);
+
+    QMap <QString, double *> double_parameters;
+    QMap <QString, int *> int_parameters;
+    QMap <QString, bool *> bool_parameters;
 
 
     Ui::MainWindow *ui;

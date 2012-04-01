@@ -1,5 +1,7 @@
 # этот файл положить рядом с исполняемым. в одну папку
 
+#номер КНС
+KNSnumber 125
 # частотники есть? yes|no
 ATV12 yes
 
@@ -89,3 +91,9 @@ level_3_sm 50
 level_4_sm 70
 # время до остановки моторов после переполнения, в секундах
 overlevel_time_to_stop 20
+
+#служебная информация
+nasos_param_index0 5
+nasos_param_index1 3
+nasos_param_index2 1
+nasos_param_index3 2

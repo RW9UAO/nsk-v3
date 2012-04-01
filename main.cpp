@@ -14,6 +14,7 @@
 #include "thread_I2C.h"
 #include "thread_math.h"
 
+
 // Данные для ведения логов
 static QTextStream* logStream;
 static QFile* logFile;

@@ -23,7 +23,7 @@ struct data_struct{
 #define ALARM_OVERLEVE 1<<8
 #define ALARM_220 1<<9
     bool isATV12;// частотник есть?
-    unsigned char ATV12maxNum;//частотник последний номер, не больше 6-ти
+    int ATV12maxNum;//частотник последний номер, не больше 6-ти
     bool isSoftStart;//плавный пуск есть?
     bool isCE303;//счетчик есть? а если найду?
     bool is21;
@@ -93,6 +93,7 @@ struct data_struct{
         QString cable;
         QString pictname;
     }nasos_param[11];
+    bool need_to_save_config;
 };
 
 #endif // DATA_STRUCT_H
