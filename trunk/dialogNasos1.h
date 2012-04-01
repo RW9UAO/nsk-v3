@@ -22,8 +22,6 @@ private:
     Ui::DialogNasos1 *dui;
     data_struct * data;
 
-public slots:
-    void MyEventHandler();
 private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_clicked();

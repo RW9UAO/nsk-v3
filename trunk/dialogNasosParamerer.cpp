@@ -15,12 +15,14 @@ DialogNasosParameter::DialogNasosParameter(data_struct * d, QWidget *parent) : Q
             dui->comboBox->addItem(this->data->nasos_param[i].name);
         }
      }else{
-        //покажем текущий насос
-        dui->comboBox->addItem(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].name);
-        //покажем картинку с графиком
-        dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].pictname) ));
-        //и артикул
-        dui->label_9->setText(QString("арт %1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].articul));
+        if(this->data->nasos_param_index[this->data->dialogparam] < 11){
+            //покажем текущий насос
+            dui->comboBox->addItem(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].name);
+            //покажем картинку с графиком
+            dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].pictname) ));
+            //и артикул
+            dui->label_9->setText(QString("арт %1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].articul));
+        }
     }
 }
 

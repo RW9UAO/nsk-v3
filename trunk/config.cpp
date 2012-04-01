@@ -16,10 +16,45 @@
 #include "thread_485.h"
 #include "ui_mainwindow.h"
 
-//void Thread_485::set_defaults(void){
+
 void MainWindow::set_defaults(void){
+
+    //cоздадим массив с адресами имен переменных
+    int_parameters["max11616ADDR"] = &this->data.max11616ADDR;
+    int_parameters["PCA9555ADDR"] = &this->data.pca9555ADDR;
+    int_parameters["MAXDEV"] = &this->data.ATV12maxNum;
+    int_parameters["nasos1_bit"] = &this->data.nasos1_bit;    int_parameters["nasos2_bit"] = &this->data.nasos2_bit;
+    int_parameters["nasos3_bit"] = &this->data.nasos3_bit;    int_parameters["nasos4_bit"] = &this->data.nasos4_bit;
+    int_parameters["nasos1_current_alarm_bit"] = &this->data.nasos1_current_alarm_bit;    int_parameters["nasos1_current_alarm_border"] = &this->data.nasos1_current_alarm_border;
+    int_parameters["nasos2_current_alarm_bit"] = &this->data.nasos2_current_alarm_bit;    int_parameters["nasos2_current_alarm_border"] = &this->data.nasos2_current_alarm_border;
+    int_parameters["nasos3_current_alarm_bit"] = &this->data.nasos3_current_alarm_bit;    int_parameters["nasos3_current_alarm_border"] = &this->data.nasos3_current_alarm_border;
+    int_parameters["nasos4_current_alarm_bit"] = &this->data.nasos4_current_alarm_bit;    int_parameters["nasos4_current_alarm_border"] = &this->data.nasos4_current_alarm_border;
+    int_parameters["nasos1_temp_alarm_bit"] = &this->data.nasos1_temp_alarm_bit;
+    int_parameters["nasos1_temp_alarm_border"] = &this->data.nasos1_temp_alarm_border;    int_parameters["nasos1_wet_alarm_border"] = &this->data.nasos1_wet_alarm_border;
+    int_parameters["nasos2_temp_alarm_bit"] = &this->data.nasos2_temp_alarm_bit;
+    int_parameters["nasos2_temp_alarm_border"] = &this->data.nasos2_temp_alarm_border;    int_parameters["nasos2_wet_alarm_border"] = &this->data.nasos2_wet_alarm_border;
+    int_parameters["nasos3_temp_alarm_bit"] = &this->data.nasos3_temp_alarm_bit;
+    int_parameters["nasos3_temp_alarm_border"] = &this->data.nasos3_temp_alarm_border;    int_parameters["nasos3_wet_alarm_border"] = &this->data.nasos3_wet_alarm_border;
+    int_parameters["nasos4_temp_alarm_bit"] = &this->data.nasos4_temp_alarm_bit;
+    int_parameters["nasos4_temp_alarm_border"] = &this->data.nasos4_temp_alarm_border;    int_parameters["nasos4_wet_alarm_border"] = &this->data.nasos4_wet_alarm_border;
+    int_parameters["level_input_number"] = &this->data.level_input_number;
+    int_parameters["level_empty_raw"] = &this->data.level_empty_raw;    int_parameters["level_full_raw"] = &this->data.level_full_raw;
+    int_parameters["level_full_sm"] = &this->data.level_full_sm;
+    int_parameters["level_1_bit"] = &this->data.level_1_bit;    int_parameters["level_2_bit"] = &this->data.level_2_bit;
+    int_parameters["level_3_bit"] = &this->data.level_3_bit;    int_parameters["level_4_bit"] = &this->data.level_4_bit;
+    int_parameters["level_1_sm"] = &this->data.level_1_sm;    int_parameters["level_2_sm"] = &this->data.level_2_sm;
+    int_parameters["level_3_sm"] = &this->data.level_3_sm;    int_parameters["level_4_sm"] = &this->data.level_4_sm;
+    int_parameters["overlevel_time_to_stop"] = &this->data.overlevel_time_to_stop;
+    int_parameters["nasos_param_index0"] = &this->data.nasos_param_index[0];    int_parameters["nasos_param_index1"] = &this->data.nasos_param_index[1];
+    int_parameters["nasos_param_index2"] = &this->data.nasos_param_index[2];    int_parameters["nasos_param_index3"] = &this->data.nasos_param_index[3];
+    //int_parameters[""] = &this->data.;
+
+    double_parameters["PIDtarget"] = &this->data.targetPos;    double_parameters["PID_P"] = &this->data.Pparam;
+    double_parameters["PID_I"] = &this->data.Iparam;    double_parameters["PID_D"] = &this->data.Dparam;
+
     this->data.servicemode = false;
     //this->data.servicemode = true;
+    this->data.need_to_save_config = false;
     this->data.error_flags = 0;
     this->data.KNSnumber = "123";
     this->data.isATV12 = true;        //по умолчанию включим 4-ре частотника и счетчик
@@ -79,10 +114,10 @@ void MainWindow::set_defaults(void){
     this->data.time_to_stop = -1;
     this->data.level_to_show = 0;
     this->data.level_to_show_sm = -1;
-    this->data.nasos_param_index[0] = 5;
-    this->data.nasos_param_index[1] = 3;
-    this->data.nasos_param_index[2] = 11;
-    this->data.nasos_param_index[3] = 12;
+    this->data.nasos_param_index[0] = 0;
+    this->data.nasos_param_index[1] = 0;
+    this->data.nasos_param_index[2] = 0;
+    this->data.nasos_param_index[3] = 0;
 //получим список файлов с артикулами из папки ./bd
     QFile config_file;// имя конфигурационного файла
     QTextStream config_in;
@@ -124,18 +159,34 @@ void MainWindow::read_config(void){
     QFile config_file("config.txt");// имя конфигурационного файла
     QTextStream config_in(&config_file);// создадим поток для чтения
     QString config_line;
+    //QMapIterator<QString, double *> i(parameters);
+    QMutableMapIterator<QString, int *> int_i(int_parameters);
+    QMutableMapIterator<QString, double *> double_i(double_parameters);
+
+    //проверить есть ли old_config.txt, возможно предыдущий раз завершился аварией
 
 if( config_file.open(QIODevice::ReadOnly) ){ // откроем файл для чтения
 do {
       // берем очередную строку из файла
       config_line = config_in.readLine();
       ///////////////////////////////////////
-
-      if( config_line.contains("max11616ADDR") ){
-        this->data.max11616ADDR = get_double_from_config(config_line);
+      int_i.toFront();//перемещаемся в начало списка
+      while(int_i.hasNext()){//пока можно взять следующий
+          int_i.next();
+          if( config_line.contains(int_i.key()) ){//поищем в строке слово из списка
+              *int_i.value() = get_double_from_config(config_line);//положим переменную
+          }
       }
-      if( config_line.contains("PCA9555ADDR") ){
-        this->data.pca9555ADDR = get_double_from_config(config_line);
+      double_i.toFront();//перемещаемся в начало списка
+      while(double_i.hasNext()){//пока можно взять следующий
+          double_i.next();
+          if( config_line.contains(double_i.key()) ){//поищем в строке слово из списка
+              *double_i.value() = get_double_from_config(config_line);//положим переменную
+          }
+      }
+      if (config_line.contains("KNSnumber") ){
+        config_line.remove(0, config_line.indexOf(" ",0) + 1);
+        this->data.KNSnumber = config_line;
       }
       if (config_line.contains("level_meter") ){
           if (config_line.contains("yes") ){
@@ -144,133 +195,6 @@ do {
           }else{
                   this->data.islevel_meter = false;
           }
-      }
-      if (config_line.contains("level_input_number") ){
-          this->data.level_input_number = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_empty_raw") ){
-               this->data.level_empty_raw = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_full_raw") ){
-               this->data.level_full_raw = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_full_sm") ){
-               this->data.level_full_sm = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_1_bit") ){
-               this->data.level_1_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_2_bit") ){
-               this->data.level_2_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_3_bit") ){
-               this->data.level_3_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_4_bit") ){
-               this->data.level_4_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_1_sm") ){
-               this->data.level_1_sm = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_2_sm") ){
-               this->data.level_2_sm = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_3_sm") ){
-               this->data.level_3_sm = get_double_from_config(config_line);
-      }
-      if (config_line.contains("level_4_sm") ){
-               this->data.level_4_sm = get_double_from_config(config_line);
-      }
-      if (config_line.contains("overlevel_time_to_stop") ){
-               this->data.overlevel_time_to_stop = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos1_bit") ){
-               this->data.nasos1_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos2_bit") ){
-               this->data.nasos2_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos3_bit") ){
-               this->data.nasos3_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos4_bit") ){
-               this->data.nasos4_bit = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos1_current_alarm_border") ){
-              this->data.nasos1_current_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos2_current_alarm_border") ){
-               this->data.nasos2_current_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos3_current_alarm_border") ){
-               this->data.nasos3_current_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos4_current_alarm_border") ){
-               this->data.nasos4_current_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos1_temp_alarm_border") ){
-               this->data.nasos1_temp_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos2_temp_alarm_border") ){
-               this->data.nasos2_temp_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos3_temp_alarm_border") ){
-               this->data.nasos3_temp_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos4_temp_alarm_border") ){
-               this->data.nasos4_temp_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos1_wet_alarm_border") ){
-        this->data.nasos1_wet_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos2_wet_alarm_border") ){
-        this->data.nasos2_wet_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos3_wet_alarm_border") ){
-        this->data.nasos3_wet_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos4_wet_alarm_border") ){
-        this->data.nasos4_wet_alarm_border = get_double_from_config(config_line);
-      }
-      if (config_line.contains("nasos1_current_alarm_bit") ){
-             this->data.nasos1_current_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos2_current_alarm_bit") ){
-             this->data.nasos2_current_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos3_current_alarm_bit") ){
-             this->data.nasos3_current_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos4_current_alarm_bit") ){
-             this->data.nasos4_current_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos1_temp_alarm_bit") ){
-             this->data.nasos1_temp_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos2_temp_alarm_bit") ){
-             this->data.nasos2_temp_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos3_temp_alarm_bit") ){
-             this->data.nasos3_temp_alarm_bit = get_double_from_config(config_line);
-    }
-    if (config_line.contains("nasos4_temp_alarm_bit") ){
-             this->data.nasos4_temp_alarm_bit = get_double_from_config(config_line);
-    }
-      if (config_line.contains("PIDtarget") ){
-              this->data.targetPos = get_double_from_config(config_line);
-              qDebug() << QString("PIDtarget %1").arg(this->data.targetPos);
-      }
-      if (config_line.contains("PID_P") ){
-              this->data.Pparam = get_double_from_config(config_line);
-              qDebug() << QString("Pparam %1").arg(this->data.Pparam);
-      }
-      if (config_line.contains("PID_D") ){
-              this->data.Dparam = get_double_from_config(config_line);
-              qDebug() << QString("Dparam %1").arg(this->data.Dparam);
-      }
-      if (config_line.contains("PID_I") ){
-              this->data.Iparam = get_double_from_config(config_line);
-              qDebug() << QString("Iparam %1").arg(this->data.Iparam);
       }
       if (config_line.contains("PCA9555") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
@@ -312,11 +236,6 @@ do {
                 this->data.isSoftStart = false;
         }
     }
-    if (config_line.contains("MAXDEV") ){
-            this->data.ATV12maxNum = get_double_from_config(config_line);
-            QString s = QString("ATV12 has maximum %1 addr").arg(this->data.ATV12maxNum);
-            qDebug() << s;
-    }
   } while (!config_line.isNull());             // последней строки достигли в файле
 config_file.close();                           // закроем конфигурационный файл
 
@@ -327,6 +246,55 @@ qDebug() << QString("borders:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12")
 
 //qDebug() << QString("levels:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12") it`s too looong
 
+}else{
+  QMessageBox msgBox;
+  msgBox.setText("Error open file\r\nconfig.txt");
+  msgBox.exec();
+qDebug("error open config.txt");
+}
+}
+//=============================================================================================
+//  config file saver
+void MainWindow::save_config(void){
+    QFile file("config.txt");
+    file.rename("config.txt", "old_config.txt");
+    QFile old_config_file("old_config.txt");// имя старого конфигурационного файла
+    QTextStream config_in(&old_config_file);// создадим поток для чтения
+    QFile config_file("config.txt");// имя нового конфигурационного файла
+    QTextStream config_out(&config_file);// создадим поток для чтения
+    QString config_line;
+    //QMapIterator<QString, double *> i(parameters);
+    QMutableMapIterator<QString, int *> int_i(int_parameters);
+    QMutableMapIterator<QString, double *> double_i(double_parameters);
+
+    config_file.open(QIODevice::WriteOnly);
+if( old_config_file.open(QIODevice::ReadOnly) ){
+do {
+        config_line = config_in.readLine();// берем очередную строку из файла
+//проверим все int из списка
+        int_i.toFront();
+        while(int_i.hasNext()){
+            int_i.next();
+            if( config_line.contains(int_i.key()) ){
+                config_line = QString("%1 %2").arg(int_i.key()).arg(*int_i.value());
+            }
+        }
+        double_i.toFront();
+        while(double_i.hasNext()){
+            double_i.next();
+            if( config_line.contains(double_i.key()) ){
+                config_line = QString("%1 %2").arg(double_i.key()).arg(*double_i.value(),0,'f',3);
+            }
+        }
+//bool прийдется тут руками растолкать
+        if (config_line.contains("KNSnumber") ){
+          config_line = QString("KNSnumber %1").arg(this->data.KNSnumber);
+        }
+        config_out << config_line << "\n";
+    } while (!config_line.isNull());             // последней строки достигли в файле
+  config_file.close();                           // закроем конфигурационный файл
+  old_config_file.close();                           // закроем конфигурационный файл
+  old_config_file.remove();
 }else{
   QMessageBox msgBox;
   msgBox.setText("Error open file\r\nconfig.txt");

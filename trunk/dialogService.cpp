@@ -54,3 +54,7 @@ void DialogService::on_pushButton_clicked(){
     this->data->tempstr = "killall";//попросим вызывавшего нас тоже завершиться
     this->close();
 }
+
+void DialogService::on_pushButton_2_clicked(){
+    this->data->need_to_save_config = true;
+}
