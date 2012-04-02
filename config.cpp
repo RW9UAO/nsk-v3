@@ -95,6 +95,7 @@ void MainWindow::set_defaults(void){
     for(int i = 0; i < 12; i++){this->data.max11616[i] = -1;}
     this->data.max11616ADDR = 0;
     this->data.targetPos = 0; this->data.Pparam = 1; this->data.Dparam = 1; this->data.Iparam = 1;
+    this->data.IntegratedError = this->data.LastPosition = 0;
     this->data.nasos1_current_alarm_bit = -1;
     this->data.nasos2_current_alarm_bit = -1;
     this->data.nasos3_current_alarm_bit = -1;
@@ -141,6 +142,11 @@ void MainWindow::set_defaults(void){
         this->data.nasos_param[i].pictname = config_in.readLine() + ".gif";
         config_file.close();
     }
+    //this->data.nasos1_on = false;this->data.nasos2_on = false;
+    //this->data.nasos3_on = false;this->data.nasos4_on = false;
+    this->data.nasos_rez[0] = false;    this->data.nasos_rez[1] = false;
+    this->data.nasos_rez[3] = false;    this->data.nasos_rez[2] = false;
+
 }
 //========================================================================================================================
 double get_double_from_config(QString config_line){
