@@ -18,12 +18,16 @@ signals:
 //        void changeDataCE303();
         void changeDataMain();
         void changeDataNasos1();
-        void changeDataNasos2();
-        void changeDataNasos3();
-        void changeDataNasos4();
+//        void changeDataNasos2();
+//        void changeDataNasos3();
+//        void changeDataNasos4();
 
 private:
         Ui::MainWindow *ui;
         MainWindow *wnd;
+        int getkolvo();
+        int getminTTW();
+        int constrain(int input_freq);
+        double PID();
 };
 #endif // THREAD_MATH_H
