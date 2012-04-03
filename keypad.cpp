@@ -21,6 +21,7 @@ Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), 
     case 4:
         dui->label->setText("Введите пароль");
         dui->lineEdit->setEchoMode(QLineEdit::Password);
+        break;
     case 5:
         dui->label->setText("Если нет - введите 0\nесли есть - любую цифру");
         break;
@@ -29,7 +30,7 @@ Dialogkeypad::Dialogkeypad(data_struct * d, QWidget *parent) : QDialog(parent), 
         dui->label->setText("");
         break;
     }
-    this->data->dialogparam = 0;
+    //this->data->dialogparam = 0;
 }
 
 Dialogkeypad::~Dialogkeypad(){
@@ -42,33 +43,43 @@ void Dialogkeypad::MyEventHandler(){
 
 void Dialogkeypad::on_b1_clicked(){
     dui->lineEdit->insert("1");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b2_clicked(){
     dui->lineEdit->insert("2");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b4_clicked(){
     dui->lineEdit->insert("4");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b3_clicked(){
     dui->lineEdit->insert("3");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b5_clicked(){
     dui->lineEdit->insert("5");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b6_clicked(){
     dui->lineEdit->insert("6");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b7_clicked(){
     dui->lineEdit->insert("7");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b8_clicked(){
     dui->lineEdit->insert("8");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b9_clicked(){
     dui->lineEdit->insert("9");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_b0_clicked(){
     dui->lineEdit->insert("0");
+    if(dui->lineEdit->text().size() == 6 && this->data->dialogparam == 4) on_save_clicked();
 }
 void Dialogkeypad::on_bdot_clicked(){
     dui->lineEdit->insert(".");
