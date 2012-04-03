@@ -10,6 +10,7 @@
 #include <memory>
 #include <QObject>
 #include <QMap>
+#include <QtNetwork>
 
 #include "dialogATV12.h"
 #include "dialogI2C.h"

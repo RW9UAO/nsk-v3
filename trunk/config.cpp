@@ -54,6 +54,8 @@ void MainWindow::set_defaults(void){
 
     this->data.servicemode = false;
     //this->data.servicemode = true;
+    this->data.IPboardAddr = "10.10.3.120";
+    this->data.need_to_set_date_time_fromCE303 = true;
     this->data.need_to_save_config = false;
     this->data.error_flags = 0;
     this->data.KNSnumber = "123";
@@ -194,6 +196,10 @@ do {
         config_line.remove(0, config_line.indexOf(" ",0) + 1);
         this->data.KNSnumber = config_line;
       }
+      if (config_line.contains("IPboardAddr") ){
+        config_line.remove(0, config_line.indexOf(" ",0) + 1);
+        this->data.IPboardAddr = config_line;
+      }
       if (config_line.contains("level_meter") ){
           if (config_line.contains("yes") ){
                   this->data.islevel_meter = true;
@@ -295,6 +301,9 @@ do {
 //bool прийдется тут руками растолкать
         if (config_line.contains("KNSnumber") ){
           config_line = QString("KNSnumber %1").arg(this->data.KNSnumber);
+        }
+        if (config_line.contains("IPboardAddr") ){
+          config_line = QString("IPboardAddr %1").arg(this->data.IPboardAddr);
         }
         config_out << config_line << "\n";
     } while (!config_line.isNull());             // последней строки достигли в файле

@@ -29,5 +29,6 @@ private:
         int getminTTW();
         int constrain(int input_freq);
         double PID();
+        void start_one_more_pump(int i);
 };
 #endif // THREAD_MATH_H

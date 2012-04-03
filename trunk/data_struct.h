@@ -28,6 +28,8 @@ struct data_struct{
     bool servicemode;//сервисный режим, доступ к настройкам
     int servicemodeTTL;//время жизни сервисного режима
     QString KNSnumber;//номер КНС
+    QString IPboardAddr;
+    bool need_to_set_date_time_fromCE303;
     //ATV12 data
     bool isATV12;// частотник есть?
     int ATV12maxNum;//частотник последний номер, не больше 6-ти
