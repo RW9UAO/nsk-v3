@@ -2,6 +2,9 @@
 
 #номер КНС
 KNSnumber 125
+#адрес платы
+IPboardAddr 10.10.3.130
+
 # частотники есть? yes|no
 ATV12 yes
 

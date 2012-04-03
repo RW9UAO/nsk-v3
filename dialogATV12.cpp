@@ -5,7 +5,6 @@
 
 DialogATV12::DialogATV12(data_struct * d, QWidget *parent) : QDialog(parent), dui(new Ui::DialogATV12){
     dui->setupUi(this);
-
     this->data = d;
 }
 
