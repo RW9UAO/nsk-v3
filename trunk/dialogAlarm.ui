@@ -60,6 +60,19 @@
     <string>Очистить</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>92</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Главная</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

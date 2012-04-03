@@ -230,11 +230,13 @@ QThread::msleep(5000);
                }
          }else{
              //вычислим уровень в сантиметрах
+             //прирост уровня от начала
              double a = (double)wnd->data.max11616[wnd->data.level_input_number] - (double)wnd->data.level_empty_raw;
-             double b = a * (double)wnd->data.level_full_sm;
-             double c = b / (double)wnd->data.level_full_raw;
-             wnd->data.level_to_show_sm = c;
-           //wnd->data.level_to_show_sm = (double)(wnd->data.level_full_sm * (wnd->data.max11616[wnd->data.level_input_number] - wnd->data.level_empty_raw)) / wnd->data.level_full_raw;
+             //полная шкала показаний АЦП
+             double b = (double)wnd->data.level_full_raw - (double)wnd->data.level_empty_raw;
+             double c = a / b;
+             double d = c * (double)wnd->data.level_full_sm;
+             wnd->data.level_to_show_sm = d;
            if(wnd->data.level_to_show_sm < wnd->data.level_1_sm){
                wnd->data.level_to_show = 2;
            }
@@ -337,17 +339,28 @@ QThread::msleep(5000);
             if(wnd->data.time_to_stop == -1 || //время плавной остановки в конфиге не задано. тупо тормозим
                wnd->data.time_to_stop == 0 ){//пришло время остановки
                 if(wnd->data.isATV12){//частотникам пошлем команду
-                    wnd->data.stop[0]=wnd->data.stop[1]=wnd->data.stop[2]=wnd->data.stop[3] = true;
-                    wnd->data.start[0]=wnd->data.start[1]=wnd->data.start[2]=wnd->data.start[3]=false;
-                    //wnd->data.nasos1_on = false;wnd->data.nasos2_on = false;
-                    //wnd->data.nasos3_on = false;wnd->data.nasos4_on = false;
+                    //надо по очереди отключать насосы
+                        for(int i = 0; i < 4; i++){
+                            if( wnd->data.nasos[i] == 2){//включен, работает
+                                wnd->data.stop[i]=true;
+                                wnd->data.start[i]=false;
+                                qDebug() << QString("ATV12 STOP %1").arg(i+1);
+                                i = 100500;
+                            }
+                        }
                 }else{//ппуски просто отключаем пускателями
-                    wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos1_bit);
-                    wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos2_bit);
-                    wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos3_bit);
-                    wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos4_bit);
-                    //wnd->data.nasos1_on = false;wnd->data.nasos2_on = false;
-                    //wnd->data.nasos3_on = false;wnd->data.nasos4_on = false;
+                    for(int i = 0; i < 4; i++){
+                        if( wnd->data.nasos[i] == 2){//включен, работает
+                            qDebug() << QString("motor STOP %1").arg(i+1);
+                            switch(i){
+                            case 0:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos1_bit);break;
+                            case 1:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos2_bit);break;
+                            case 2:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos3_bit);break;
+                            case 3:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos4_bit);break;
+                            }
+                            i = 100500;
+                        }
+                    }
                 }
                 wnd->data.nasos[3] = wnd->data.nasos[2] = wnd->data.nasos[1] = wnd->data.nasos[0] = 1;//не включен, готов
 //убедиться, что после этого никто не пытается включать насосы
@@ -400,8 +413,13 @@ QThread::msleep(5000);
                         wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
                         //wnd->data.freq_w[i] = constrain(wnd->data.freq_w[i] + PID());
                         wnd->data.stop[i] = false; wnd->data.start[i]= true;
-                    }else{//пускатели
-
+                        qDebug() << QString("Level 2, start %1").arg(i+1);
+                    }
+                    switch(i){
+                    case 0:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos1_bit);  break;
+                    case 1:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos2_bit);  break;
+                    case 2:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos3_bit);  break;
+                    case 3:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos4_bit);  break;
                     }
                 }
             }
@@ -417,8 +435,13 @@ QThread::msleep(5000);
                         wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
                         //wnd->data.freq_w[i] = constrain(wnd->data.freq_w[i] + PID());
                         wnd->data.stop[i] = false; wnd->data.start[i]= true;
-                    }else{//пускатели
-
+                        qDebug() << QString("Level 3, start %1").arg(i);
+                    }
+                    switch(i){
+                    case 0:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos1_bit);  break;
+                    case 1:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos2_bit);  break;
+                    case 2:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos3_bit);  break;
+                    case 3:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos4_bit);  break;
                     }
                 }
             }

@@ -210,8 +210,10 @@ void DialogSetupGeneral::on_pushButton_12_clicked(){
     }
 }
 
-void DialogSetupGeneral::on_pushButton_16_clicked(){//калибровка
+void DialogSetupGeneral::on_pushButton_16_clicked(){//калибровка    
     QDialog * d_key = new DialogCalibr(this->data, this);
+    d_key->setWindowFlags(Qt::FramelessWindowHint);
+    d_key->setStyleSheet("QDialog {background-color: rgb(120,120,120); }");
     QPoint pos = d_key->pos();
     pos.setX(0);    pos.setY(0);    d_key->move(pos);
     d_key->exec();
