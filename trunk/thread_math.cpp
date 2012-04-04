@@ -1,3 +1,5 @@
+#include <QGraphicsScene>
+#include <QGraphicsItem>
 #include <QtDebug>
 #include <qtextcodec.h>
 #include <errno.h>
@@ -100,7 +102,6 @@ void Thread_math::run() {
     emit changeDataMain();//отрисуем MainWindow
     //подождем пока I2C поток запустится и даст данные
 QThread::msleep(9000);
-
     // вот тут вся математика в основном цикле
     while(wnd->done){
 //=========================================================================================================================================================
@@ -124,7 +125,7 @@ QThread::msleep(9000);
                 wnd->data.nasos[i] = 3;//авария по току
             }
             if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_temp_alarm_border[i]){
-                wnd->data.nasos[i] = 4;////авария по температуре
+                wnd->data.nasos[i] = 4;//авария по температуре
             }
             if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_wet_alarm_border[i]){
                 wnd->data.nasos[i] = 5;//авария по влажности
