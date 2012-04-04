@@ -83,12 +83,7 @@ int Thread_math::constrain(int input_freq){
 void Thread_math::start_one_more_pump(int i){
     if(i > 3)return;// мало-ли что прилетит на вход
 // включим пускатель
-    switch(i){
-    case 0:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos1_bit);  break;
-    case 1:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos2_bit);  break;
-    case 2:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos3_bit);  break;
-    case 3:wnd->data.pca9555_output1W |= (1<< wnd->data.nasos4_bit);  break;
-    }
+    wnd->data.pca9555_output1W |= (1<< wnd->data.nasos_bit[i]);
     //дадим команду частотнику на запуск
     if(wnd->data.isATV12){//частотник
         //wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
@@ -110,121 +105,47 @@ QThread::msleep(9000);
     while(wnd->done){
 //=========================================================================================================================================================
  //проверим аварии с 35 мс
-        //завести массив из wnd->data.nasos1_bit вместо 4-х переменных
         //проверку на ответ частотника
-        if(wnd->data.nasos1_bit == -1 || wnd->data.ATV12status[0] == OFFLINE)wnd->data.nasos[0] = 0;//нет насоса
+      for(int i = 0; i < 4; i++){
+        if(wnd->data.nasos_bit[i] == -1 || wnd->data.ATV12status[i] == OFFLINE)wnd->data.nasos[i] = 0;//нет насоса
         else{
-            wnd->data.nasos[0] = 1;//не включен, готов
+            wnd->data.nasos[i] = 1;//не включен, готов
             //если есть частотник, сделаем вывод о включенности по команде "start"
             if(wnd->data.isATV12){
-                if(wnd->data.ATV12status[0] == RUN)
-                    wnd->data.nasos[0] = 2;//включен, работает
+                if(wnd->data.ATV12status[i] == RUN)
+                    wnd->data.nasos[i] = 2;//включен, работает
             }else{
             //если нет частотника, сделаем вывод о включенности по пускателю
-                if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos1_bit) ){
-                    wnd->data.nasos[0] = 2;//включен, работает
+                if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos_bit[i]) ){
+                    wnd->data.nasos[i] = 2;//включен, работает
                 }
             }
-            if(wnd->data.max11616[wnd->data.nasos1_current_alarm_bit] > wnd->data.nasos1_current_alarm_border){
-                wnd->data.nasos[0] = 3;//авария по току
+            if(wnd->data.max11616[wnd->data.nasos_current_alarm_bit[i]] > wnd->data.nasos_current_alarm_border[i]){
+                wnd->data.nasos[i] = 3;//авария по току
             }
-            if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > wnd->data.nasos1_temp_alarm_border){
-                wnd->data.nasos[0] = 4;////авария по температуре
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_temp_alarm_border[i]){
+                wnd->data.nasos[i] = 4;////авария по температуре
             }
-            if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > wnd->data.nasos1_wet_alarm_border){
-                wnd->data.nasos[0] = 5;//авария по влажности
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_wet_alarm_border[i]){
+                wnd->data.nasos[i] = 5;//авария по влажности
             }
-            if(wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos1_temp_alarm_bit] < 1000){
-                wnd->data.nasos[0] = 6;//авария по обрыву кабеля
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > 4000 || wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < 1000){
+                wnd->data.nasos[i] = 6;//авария по обрыву кабеля
             }
          }
-//------------------------------------------------
-        if(wnd->data.nasos2_bit == -1)wnd->data.nasos[1] = 0;//нет насоса
-        else{
-            wnd->data.nasos[1] = 1;//не включен, готов
-            if(wnd->data.isATV12){
-                if(wnd->data.ATV12status[1] == RUN)
-                    wnd->data.nasos[1] = 2;//включен, работает
-            }else{
-                if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos2_bit) ){
-                    wnd->data.nasos[1] = 2;//включен, работает
-                }
-            }
-            if(wnd->data.max11616[wnd->data.nasos2_current_alarm_bit] > wnd->data.nasos2_current_alarm_border){
-                wnd->data.nasos[1] = 3;//авария по току
-            }
-            if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > wnd->data.nasos2_temp_alarm_border){
-                wnd->data.nasos[1] = 4;////авария по температуре
-            }
-            if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > wnd->data.nasos2_wet_alarm_border){
-                wnd->data.nasos[1] = 5;//авария по влажности
-            }
-            if(wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos2_temp_alarm_bit] < 1000){
-                wnd->data.nasos[1] = 6;//авария по обрыву кабеля
-            }
-        }
-//---------------------------------------------------
-        if(wnd->data.nasos3_bit == -1)wnd->data.nasos[2] = 0;//нет насоса
-        else{
-            wnd->data.nasos[2] = 1;//не включен, готов
-            if(wnd->data.isATV12){
-                if(wnd->data.ATV12status[2] == RUN)
-                    wnd->data.nasos[2] = 2;//включен, работает
-            }else{
-                if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos3_bit) ){
-                    wnd->data.nasos[2] = 2;//включен, работает
-                }
-            }
-            if(wnd->data.max11616[wnd->data.nasos3_current_alarm_bit] > wnd->data.nasos3_current_alarm_border){
-                wnd->data.nasos[2] = 3;//авария по току
-            }
-            if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > wnd->data.nasos3_temp_alarm_border){
-                wnd->data.nasos[2] = 4;////авария по температуре
-            }
-            if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > wnd->data.nasos3_wet_alarm_border){
-                wnd->data.nasos[2] = 5;//авария по влажности
-            }
-            if(wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos3_temp_alarm_bit] < 1000){
-                wnd->data.nasos[2] = 6;//авария по обрыву кабеля
-            }
-        }
-//------------------------------------------------------
-        if(wnd->data.nasos4_bit == -1)wnd->data.nasos[3] = 0;//нет насоса
-        else{
-            wnd->data.nasos[3] = 1;//не включен, готов
-            if(wnd->data.isATV12){
-                if(wnd->data.ATV12status[3] == RUN)
-                    wnd->data.nasos[3] = 2;//включен, работает
-            }else{
-                if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos4_bit) ){
-                    wnd->data.nasos[3] = 2;//включен, работает
-                }
-            }
-            if(wnd->data.max11616[wnd->data.nasos4_current_alarm_bit] > wnd->data.nasos4_current_alarm_border){
-                wnd->data.nasos[3] = 3;//авария по току
-            }
-            if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > wnd->data.nasos4_temp_alarm_border){
-                wnd->data.nasos[3] = 4;////авария по температуре
-            }
-            if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > wnd->data.nasos4_wet_alarm_border){
-                wnd->data.nasos[3] = 5;//авария по влажности
-            }
-            if(wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] > 4000 || wnd->data.max11616[wnd->data.nasos4_temp_alarm_bit] < 1000){
-                wnd->data.nasos[3] = 6;//авария по обрыву кабеля
-            }
-        }
+      }
         //обработаем ошибки и выключим моторы
         if(wnd->data.nasos[0] == 0 || wnd->data.nasos[0] > 2){
-                wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos1_bit);
+            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[0]);
         }
         if(wnd->data.nasos[1] == 0 || wnd->data.nasos[1] > 2){
-                wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos2_bit);
+            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[1]);
         }
         if(wnd->data.nasos[2] == 0 || wnd->data.nasos[2] > 2){
-                wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos3_bit);
+            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[2]);
         }
         if(wnd->data.nasos[3] == 0 || wnd->data.nasos[3] > 2){
-                wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos4_bit);
+            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[3]);
         }
 //=========================================================================================================================================================
         for(int i=0;i<4;i++){
@@ -396,17 +317,11 @@ QThread::msleep(9000);
                     for(int i = 0; i < 4; i++){
                         if( wnd->data.nasos[i] == 2){//включен, работает
                             qDebug() << QString("motor STOP %1").arg(i+1);
-                            switch(i){
-                            case 0:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos1_bit);break;
-                            case 1:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos2_bit);break;
-                            case 2:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos3_bit);break;
-                            case 3:wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos4_bit);break;
-                            }
+                            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[i]);
                             i = 100500;
                         }
                     }
                 }
-//                wnd->data.nasos[3] = wnd->data.nasos[2] = wnd->data.nasos[1] = wnd->data.nasos[0] = 1;//не включен, готов
 //убедиться, что после этого никто не пытается включать насосы
                 //wnd->data.motor_need_to_stop = false;
             }else{

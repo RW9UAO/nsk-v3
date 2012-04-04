@@ -45,7 +45,7 @@ void installLog(){
     if(logFile->open(QFile::WriteOnly | QIODevice::Append | QIODevice::Unbuffered))
         logStream = new QTextStream(logFile);
 
-    //logStream->setCodec("utf-8");
+    logStream->setCodec("utf-8");
 
 // Запись заголовка с информацией о запуске
     if(logStream && logStream->device()){
@@ -73,6 +73,9 @@ qInstallMsgHandler(0);
 }
 //==============================================================================================
 int main(int argc, char *argv[]){
+
+    installLog();
+
     QApplication a(argc, argv);
     MainWindow w;
     Thread_485 t(&w);
@@ -85,7 +88,6 @@ int main(int argc, char *argv[]){
     QTextCodec::setCodecForLocale(cyrillicCodec);
     QTextCodec::setCodecForCStrings(cyrillicCodec);
 
-    installLog();
     //покажем основное окно
     w.show();
 // сигналы для обновления отрисовки диалогов

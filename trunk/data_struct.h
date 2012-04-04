@@ -71,12 +71,12 @@ struct data_struct{
     double targetPos, Pparam, Dparam, Iparam, IntegratedError, LastPosition;
     int nasos[4];//состояние насоса
     int nasos_TTW[4];//время наработки насоса
-    int nasos1_bit, nasos2_bit, nasos3_bit, nasos4_bit;
-    int nasos1_current_alarm_bit,nasos2_current_alarm_bit,nasos3_current_alarm_bit,nasos4_current_alarm_bit;
-    int nasos1_temp_alarm_bit,nasos2_temp_alarm_bit,nasos3_temp_alarm_bit,nasos4_temp_alarm_bit;
-    int nasos1_current_alarm_border,nasos2_current_alarm_border,nasos3_current_alarm_border,nasos4_current_alarm_border;
-    int nasos1_temp_alarm_border,nasos2_temp_alarm_border,nasos3_temp_alarm_border,nasos4_temp_alarm_border;
-    int nasos1_wet_alarm_border,nasos2_wet_alarm_border,nasos3_wet_alarm_border,nasos4_wet_alarm_border;
+    int nasos_bit[4];
+    int nasos_current_alarm_bit[4];
+    int nasos_temp_alarm_bit[4];
+    int nasos_current_alarm_border[4];
+    int nasos_temp_alarm_border[4];
+    int nasos_wet_alarm_border[4];
     int level_input_number, level_empty_raw, level_full_raw, level_full_sm;
     int level_1_bit, level_2_bit, level_3_bit, level_4_bit;
     int level_1_sm, level_2_sm, level_3_sm, level_4_sm, overlevel_time_to_stop;

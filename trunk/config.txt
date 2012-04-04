@@ -32,11 +32,11 @@ CE303 yes
 # Коротким нажатием кнопки <ДСТП> завершить процедуру.
 
 #дискретный ввод-вывод
-PCA9555 yes
-PCA9555ADDR 1
+PCA9555chip yes
+PCA9555ADDR 0
 
 #АЦП
-MAX11616 yes
+MAX11616chip yes
 max11616ADDR 0
 
 PIDtarget 2000
