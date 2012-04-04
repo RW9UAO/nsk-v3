@@ -23,20 +23,28 @@ void MainWindow::set_defaults(void){
     int_parameters["max11616ADDR"] = &this->data.max11616ADDR;
     int_parameters["PCA9555ADDR"] = &this->data.pca9555ADDR;
     int_parameters["MAXDEV"] = &this->data.ATV12maxNum;
-    int_parameters["nasos1_bit"] = &this->data.nasos1_bit;    int_parameters["nasos2_bit"] = &this->data.nasos2_bit;
-    int_parameters["nasos3_bit"] = &this->data.nasos3_bit;    int_parameters["nasos4_bit"] = &this->data.nasos4_bit;
-    int_parameters["nasos1_current_alarm_bit"] = &this->data.nasos1_current_alarm_bit;    int_parameters["nasos1_current_alarm_border"] = &this->data.nasos1_current_alarm_border;
-    int_parameters["nasos2_current_alarm_bit"] = &this->data.nasos2_current_alarm_bit;    int_parameters["nasos2_current_alarm_border"] = &this->data.nasos2_current_alarm_border;
-    int_parameters["nasos3_current_alarm_bit"] = &this->data.nasos3_current_alarm_bit;    int_parameters["nasos3_current_alarm_border"] = &this->data.nasos3_current_alarm_border;
-    int_parameters["nasos4_current_alarm_bit"] = &this->data.nasos4_current_alarm_bit;    int_parameters["nasos4_current_alarm_border"] = &this->data.nasos4_current_alarm_border;
-    int_parameters["nasos1_temp_alarm_bit"] = &this->data.nasos1_temp_alarm_bit;
-    int_parameters["nasos1_temp_alarm_border"] = &this->data.nasos1_temp_alarm_border;    int_parameters["nasos1_wet_alarm_border"] = &this->data.nasos1_wet_alarm_border;
-    int_parameters["nasos2_temp_alarm_bit"] = &this->data.nasos2_temp_alarm_bit;
-    int_parameters["nasos2_temp_alarm_border"] = &this->data.nasos2_temp_alarm_border;    int_parameters["nasos2_wet_alarm_border"] = &this->data.nasos2_wet_alarm_border;
-    int_parameters["nasos3_temp_alarm_bit"] = &this->data.nasos3_temp_alarm_bit;
-    int_parameters["nasos3_temp_alarm_border"] = &this->data.nasos3_temp_alarm_border;    int_parameters["nasos3_wet_alarm_border"] = &this->data.nasos3_wet_alarm_border;
-    int_parameters["nasos4_temp_alarm_bit"] = &this->data.nasos4_temp_alarm_bit;
-    int_parameters["nasos4_temp_alarm_border"] = &this->data.nasos4_temp_alarm_border;    int_parameters["nasos4_wet_alarm_border"] = &this->data.nasos4_wet_alarm_border;
+    int_parameters["nasos1_bit"] = &this->data.nasos_bit[0];    int_parameters["nasos2_bit"] = &this->data.nasos_bit[2];
+    int_parameters["nasos3_bit"] = &this->data.nasos_bit[3];    int_parameters["nasos4_bit"] = &this->data.nasos_bit[4];
+    int_parameters["nasos1_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[0];
+    int_parameters["nasos1_current_alarm_border"] = &this->data.nasos_current_alarm_border[0];
+    int_parameters["nasos2_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[1];
+    int_parameters["nasos2_current_alarm_border"] = &this->data.nasos_current_alarm_border[1];
+    int_parameters["nasos3_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[2];
+    int_parameters["nasos3_current_alarm_border"] = &this->data.nasos_current_alarm_border[2];
+    int_parameters["nasos4_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[3];
+    int_parameters["nasos4_current_alarm_border"] = &this->data.nasos_current_alarm_border[3];
+    int_parameters["nasos1_temp_alarm_bit"] = &this->data.nasos_temp_alarm_bit[0];
+    int_parameters["nasos1_temp_alarm_border"] = &this->data.nasos_temp_alarm_border[0];
+    int_parameters["nasos1_wet_alarm_border"] = &this->data.nasos_wet_alarm_border[0];
+    int_parameters["nasos2_temp_alarm_bit"] = &this->data.nasos_temp_alarm_bit[1];
+    int_parameters["nasos2_temp_alarm_border"] = &this->data.nasos_temp_alarm_border[1];
+    int_parameters["nasos2_wet_alarm_border"] = &this->data.nasos_wet_alarm_border[1];
+    int_parameters["nasos3_temp_alarm_bit"] = &this->data.nasos_temp_alarm_bit[2];
+    int_parameters["nasos3_temp_alarm_border"] = &this->data.nasos_temp_alarm_border[2];
+    int_parameters["nasos3_wet_alarm_border"] = &this->data.nasos_wet_alarm_border[2];
+    int_parameters["nasos4_temp_alarm_bit"] = &this->data.nasos_temp_alarm_bit[3];
+    int_parameters["nasos4_temp_alarm_border"] = &this->data.nasos_temp_alarm_border[3];
+    int_parameters["nasos4_wet_alarm_border"] = &this->data.nasos_wet_alarm_border[3];
     int_parameters["level_input_number"] = &this->data.level_input_number;
     int_parameters["level_empty_raw"] = &this->data.level_empty_raw;    int_parameters["level_full_raw"] = &this->data.level_full_raw;
     int_parameters["level_full_sm"] = &this->data.level_full_sm;
@@ -78,6 +86,13 @@ void MainWindow::set_defaults(void){
     for(int i=0;i<4;i++){
         this->data.nasos[i] = 0;
         this->data.nasos_TTW[i] = 0;
+        this->data.nasos_current_alarm_bit[i] = -1;
+        this->data.nasos_temp_alarm_bit[i] = -1;
+        this->data.nasos_bit[i] = -1;
+        this->data.nasos_current_alarm_border[i] = -1;
+        this->data.nasos_temp_alarm_border[i] = -1;
+        this->data.nasos_param_index[i] = 0;
+        this->data.nasos_rez[i] = false;
     }
     this->data.time_ = "-";
     this->data.date_ = "-";
@@ -98,18 +113,6 @@ void MainWindow::set_defaults(void){
     this->data.max11616ADDR = 0;
     this->data.targetPos = 0; this->data.Pparam = 1; this->data.Dparam = 1; this->data.Iparam = 1;
     this->data.IntegratedError = this->data.LastPosition = 0;
-    this->data.nasos1_current_alarm_bit = -1;
-    this->data.nasos2_current_alarm_bit = -1;
-    this->data.nasos3_current_alarm_bit = -1;
-    this->data.nasos4_current_alarm_bit = -1;
-    this->data.nasos1_temp_alarm_bit = -1;
-    this->data.nasos2_temp_alarm_bit = -1;
-    this->data.nasos3_temp_alarm_bit = -1;
-    this->data.nasos4_temp_alarm_bit = -1;
-    this->data.nasos1_bit = this->data.nasos2_bit = -1;
-    this->data.nasos3_bit = this->data.nasos4_bit = -1;
-    this->data.nasos1_current_alarm_border=this->data.nasos2_current_alarm_border=this->data.nasos3_current_alarm_border=this->data.nasos4_current_alarm_border=-1;
-    this->data.nasos1_temp_alarm_border=this->data.nasos2_temp_alarm_border=this->data.nasos3_temp_alarm_border=this->data.nasos4_temp_alarm_border=-1;
     this->data.level_input_number=this->data.level_empty_raw=this->data.level_full_raw=this->data.level_full_sm=-1;
     this->data.level_1_bit=this->data.level_2_bit=this->data.level_3_bit=this->data.level_4_bit=-1;
     this->data.level_1_sm=this->data.level_2_sm=this->data.level_3_sm=this->data.level_4_sm=this->data.overlevel_time_to_stop=-1;
@@ -117,18 +120,13 @@ void MainWindow::set_defaults(void){
     this->data.time_to_stop = -1;
     this->data.level_to_show = 0;
     this->data.level_to_show_sm = -1;
-    this->data.nasos_param_index[0] = 0;
-    this->data.nasos_param_index[1] = 0;
-    this->data.nasos_param_index[2] = 0;
-    this->data.nasos_param_index[3] = 0;
 //получим список файлов с артикулами из папки ./bd
     QFile config_file;// имя конфигурационного файла
     QTextStream config_in;
     QStringList files = QDir("./bd").entryList(QStringList() << "*.art", QDir::Files); // получаем список файлов в текущей папке
     for(int i=0;i<files.size();i++){ // перебираем все эти файлы
         if(i == 11) break;//если файлов больше 11, то они к нам не влезут.
-        //qDebug() << QString("%1").arg(files[i]);
-        qDebug() << files[i];
+        //qDebug() << files[i];
         config_file.setFileName("./bd/"+files[i]);
         config_in.setDevice(&config_file);// создадим поток для чтения
         config_file.open(QIODevice::ReadOnly);// откроем файл артикула
@@ -144,11 +142,6 @@ void MainWindow::set_defaults(void){
         this->data.nasos_param[i].pictname = config_in.readLine() + ".gif";
         config_file.close();
     }
-    //this->data.nasos1_on = false;this->data.nasos2_on = false;
-    //this->data.nasos3_on = false;this->data.nasos4_on = false;
-    this->data.nasos_rez[0] = false;    this->data.nasos_rez[1] = false;
-    this->data.nasos_rez[3] = false;    this->data.nasos_rez[2] = false;
-
 }
 //========================================================================================================================
 double get_double_from_config(QString config_line){
@@ -208,7 +201,7 @@ do {
                   this->data.islevel_meter = false;
           }
       }
-      if (config_line.contains("PCA9555") ){   // сравним с нужным параметром
+      if (config_line.contains("PCA9555chip") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
               this->data.is21 = true;
               qDebug("PCA9555 include");
@@ -216,7 +209,7 @@ do {
               this->data.is21 = false;   // иначе выключено
           }
       }
-      if (config_line.contains("MAX11616") ){   // сравним с нужным параметром
+      if (config_line.contains("MAX11616chip") ){   // сравним с нужным параметром
           if (config_line.contains("yes") ){ // включено?
               this->data.is35 = true;
               qDebug("MAX11616 include");
@@ -251,10 +244,10 @@ do {
   } while (!config_line.isNull());             // последней строки достигли в файле
 config_file.close();                           // закроем конфигурационный файл
 
-qDebug() << QString("borders:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12")
+/*qDebug() << QString("borders:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12")
 .arg(this->data.nasos1_current_alarm_border).arg(this->data.nasos2_current_alarm_border).arg(this->data.nasos3_current_alarm_border).arg(this->data.nasos4_current_alarm_border)
 .arg(this->data.nasos1_temp_alarm_border).arg(this->data.nasos2_temp_alarm_border).arg(this->data.nasos3_temp_alarm_border).arg(this->data.nasos4_temp_alarm_border)
-.arg(this->data.nasos1_wet_alarm_border).arg(this->data.nasos2_wet_alarm_border).arg(this->data.nasos3_wet_alarm_border).arg(this->data.nasos4_wet_alarm_border);
+.arg(this->data.nasos1_wet_alarm_border).arg(this->data.nasos2_wet_alarm_border).arg(this->data.nasos3_wet_alarm_border).arg(this->data.nasos4_wet_alarm_border);*/
 
 //qDebug() << QString("levels:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12") it`s too looong
 

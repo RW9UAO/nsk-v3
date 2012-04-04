@@ -23,9 +23,8 @@ void Thread_I2C::run() {
     QTextStream in, out;
     QString line;
 
-    QThread::sleep(3);
-    qDebug() << QString("Thread_I2C::run PCA9555 %1 MAX11616 %2").arg(wnd->data.pca9555ADDR).arg(wnd->data.max11616ADDR);
-    qDebug() << QString("Thread_I2C::PCA9555 %1 MAX11616 %2").arg(wnd->data.is21).arg(wnd->data.is35);
+    //qDebug() << QString("Thread_I2C: PCA9555ADDR %1 MAX11616ADDR %2").arg(wnd->data.pca9555ADDR).arg(wnd->data.max11616ADDR);
+    //qDebug() << QString("Thread_I2C: isPCA9555 %1 isMAX11616 %2").arg(wnd->data.is21).arg(wnd->data.is35);
 
     // вот тут опрос
     while(wnd->done){
@@ -44,10 +43,10 @@ void Thread_I2C::run() {
                 qDebug()<< QString("pca9555_input0: %1").arg(wnd->data.pca9555_input0);
                 file.close();
             }else{
-                //if( (wnd->data.error_flags & ERROR_21) == 0 ){
+                if( (wnd->data.error_flags & ERROR_21) == 0 ){
                     qCritical("error open /sys/bus/i2c/devices/x-0021/input0");
                     wnd->data.error_flags |= ERROR_21;
-                //}
+                }
                 wnd->data.pca9555_input0 = -1;
             }
             file.setFileName(QString("/sys/bus/i2c/devices/%1-0021/input1").arg(wnd->data.pca9555ADDR) );
@@ -78,10 +77,10 @@ void Thread_I2C::run() {
                 wnd->data.pca9555_output1R = -1;
             }
         }else{
-            //if( (wnd->data.error_flags & ERROR_21) == 0 ){
+            if( (wnd->data.error_flags & ERROR_21) == 0 ){
                 qCritical("error open /sys/bus/i2c/devices/x-0021/name");
                 wnd->data.error_flags |= ERROR_21;
-             //}
+            }
         }
       }
 //опросим аналоговый вход
