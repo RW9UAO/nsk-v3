@@ -88,8 +88,8 @@ void Thread_math::start_one_more_pump(int i){
     wnd->data.pca9555_output1W |= (1<< wnd->data.nasos_bit[i]);
     //дадим команду частотнику на запуск
     if(wnd->data.isATV12){//частотник
-        //wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
-        wnd->data.freq_w[i] = 30;//по идее сюда частоту должен ПИД регулятор отдать
+        wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
+        //wnd->data.freq_w[i] = 30;//по идее сюда частоту должен ПИД регулятор отдать
         //wnd->data.freq_w[i] = constrain(wnd->data.freq_w[i] + PID());
         wnd->data.stop[i] = false; wnd->data.start[i]= true;
         qDebug() << QString("Level 2, start %1").arg(i+1);
