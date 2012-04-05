@@ -40,7 +40,7 @@ void Thread_I2C::run() {
             if( file.open(QIODevice::ReadOnly) ){ // откроем файл для чтения
                 line = in.readLine();
                 wnd->data.pca9555_input0 = line.toInt();
-                qDebug()<< QString("pca9555_input0: %1").arg(wnd->data.pca9555_input0);
+                //qDebug()<< QString("pca9555_input0: %1").arg(wnd->data.pca9555_input0);
                 file.close();
             }else{
                 if( (wnd->data.error_flags & ERROR_21) == 0 ){

@@ -23,8 +23,8 @@ void MainWindow::set_defaults(void){
     int_parameters["max11616ADDR"] = &this->data.max11616ADDR;
     int_parameters["PCA9555ADDR"] = &this->data.pca9555ADDR;
     int_parameters["MAXDEV"] = &this->data.ATV12maxNum;
-    int_parameters["nasos1_bit"] = &this->data.nasos_bit[0];    int_parameters["nasos2_bit"] = &this->data.nasos_bit[2];
-    int_parameters["nasos3_bit"] = &this->data.nasos_bit[3];    int_parameters["nasos4_bit"] = &this->data.nasos_bit[4];
+    int_parameters["nasos1_bit"] = &this->data.nasos_bit[0];    int_parameters["nasos2_bit"] = &this->data.nasos_bit[1];
+    int_parameters["nasos3_bit"] = &this->data.nasos_bit[2];    int_parameters["nasos4_bit"] = &this->data.nasos_bit[3];
     int_parameters["nasos1_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[0];
     int_parameters["nasos1_current_alarm_border"] = &this->data.nasos_current_alarm_border[0];
     int_parameters["nasos2_current_alarm_bit"] = &this->data.nasos_current_alarm_bit[1];
