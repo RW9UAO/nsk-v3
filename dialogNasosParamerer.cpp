@@ -18,14 +18,23 @@ DialogNasosParameter::DialogNasosParameter(data_struct * d, QWidget *parent) : Q
         if(this->data->nasos_param_index[this->data->dialogparam] < 11){
             //покажем текущий насос
             dui->comboBox->addItem(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].name);
-            //покажем картинку с графиком
-            dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].pictname) ));
-            //и артикул
-            dui->label_9->setText(QString("арт %1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].articul));
         }
     }
+    //покажем картинку с графиком
+    dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].pictname) ));
+    //и артикул
+    dui->label_9->setText(QString("арт %1").arg(this->data->nasos_param[this->data->nasos_param_index[this->data->dialogparam]].articul));
 }
 
 DialogNasosParameter::~DialogNasosParameter(){
     delete dui;
+}
+
+void DialogNasosParameter::on_comboBox_currentIndexChanged(int index){
+//сюда попадаем при пролистывании списка артикулов. покажем выбранную картинку и запишем новое значение
+    if(this->data->servicemode){
+//        qDebug() << QString("index changed %1").arg(index);
+        dui->label->setPixmap( QPixmap(QString("./bd/%1").arg(this->data->nasos_param[index].pictname) ));
+        this->data->nasos_param_index[this->data->dialogparam] = index;
+    }
 }

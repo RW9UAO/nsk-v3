@@ -25,5 +25,7 @@ private:
 private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_clicked();
+    void on_pushButton_W_clicked();
+    void on_pushButton_R_clicked();
 };
 #endif // DIALOGNASOS1_H

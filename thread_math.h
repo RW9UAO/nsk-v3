@@ -12,15 +12,9 @@ public:
 
         void run();
         void quit();
-
 signals:
-//        void changeDataATV12();
-//        void changeDataCE303();
         void changeDataMain();
         void changeDataNasos1();
-//        void changeDataNasos2();
-//        void changeDataNasos3();
-//        void changeDataNasos4();
 
 private:
         Ui::MainWindow *ui;
@@ -30,5 +24,6 @@ private:
         int constrain(int input_freq);
         double PID();
         void start_one_more_pump(int i);
+        void save_pump_ttw();
 };
 #endif // THREAD_MATH_H

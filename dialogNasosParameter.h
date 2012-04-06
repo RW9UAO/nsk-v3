@@ -16,7 +16,9 @@ public:
     explicit DialogNasosParameter(data_struct *d, QWidget *parent = 0);
     ~DialogNasosParameter();
 
-    //void updateDataNasos2();
+
+private slots:
+    void on_comboBox_currentIndexChanged(int index);
 
 private:
     Ui::DialogNasosParameter *dui;

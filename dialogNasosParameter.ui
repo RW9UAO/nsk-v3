@@ -31,6 +31,9 @@
      <height>27</height>
     </rect>
    </property>
+   <property name="editable">
+    <bool>false</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">

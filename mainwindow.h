@@ -40,6 +40,7 @@ public:
     void set_defaults(void);
     void read_config(void);
     void save_config(void);
+    void load_pump_ttw();
 
     QMap <QString, double *> double_parameters;
     QMap <QString, int *> int_parameters;
