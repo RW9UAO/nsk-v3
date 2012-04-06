@@ -100,3 +100,7 @@ nasos_param_index0 5
 nasos_param_index1 3
 nasos_param_index2 1
 nasos_param_index3 2
+nasos_rez0 no
+nasos_rez1 no
+nasos_rez2 yes
+nasos_rez3 no

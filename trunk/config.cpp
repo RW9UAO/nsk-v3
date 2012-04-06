@@ -241,6 +241,23 @@ do {
                 this->data.isSoftStart = false;
         }
     }
+    if (config_line.contains("nasos_rez0") ){
+        if (config_line.contains("yes") ) this->data.nasos_rez[0] = true;
+        else                              this->data.nasos_rez[0] = false;
+    }
+    if (config_line.contains("nasos_rez1") ){
+        if (config_line.contains("yes") ) this->data.nasos_rez[1] = true;
+        else                              this->data.nasos_rez[1] = false;
+    }
+    if (config_line.contains("nasos_rez2") ){
+        if (config_line.contains("yes") ) this->data.nasos_rez[2] = true;
+        else                              this->data.nasos_rez[2] = false;
+    }
+    if (config_line.contains("nasos_rez3") ){
+        if (config_line.contains("yes") ) this->data.nasos_rez[3] = true;
+        else                              this->data.nasos_rez[3] = false;
+    }
+
   } while (!config_line.isNull());             // последней строки достигли в файле
 config_file.close();                           // закроем конфигурационный файл
 
@@ -292,6 +309,23 @@ do {
             }
         }
 //bool прийдется тут руками растолкать
+        if (config_line.contains("nasos_rez0") ){
+            if(this->data.nasos_rez[0])                config_line = QString("nasos_rez0 yes");
+            else                config_line = QString("nasos_rez0 no");
+        }
+        if (config_line.contains("nasos_rez1") ){
+            if(this->data.nasos_rez[1])                config_line = QString("nasos_rez1 yes");
+            else                config_line = QString("nasos_rez1 no");
+        }
+        if (config_line.contains("nasos_rez2") ){
+            if(this->data.nasos_rez[2])                config_line = QString("nasos_rez2 yes");
+            else                config_line = QString("nasos_rez2 no");
+        }
+        if (config_line.contains("nasos_rez3") ){
+            if(this->data.nasos_rez[3])                config_line = QString("nasos_rez3 yes");
+            else                config_line = QString("nasos_rez3 no");
+        }
+//qstring
         if (config_line.contains("KNSnumber") ){
           config_line = QString("KNSnumber %1").arg(this->data.KNSnumber);
         }
@@ -309,4 +343,19 @@ do {
   msgBox.exec();
 qDebug("error open config.txt");
 }
+}
+//==============================================================================
+void MainWindow::load_pump_ttw(){
+    QFile config_file("workinfo.txt");// имя нового конфигурационного файла
+    QTextStream config_in(&config_file);// создадим поток для чтения
+    QString config_line;
+
+    if(config_file.open(QIODevice::ReadOnly) ){
+        for(int i=0;i<4;i++){
+            config_line = config_in.readLine();// берем очередную строку из файла
+            config_line.remove(0, config_line.indexOf(" ",0) + 1);
+            this->data.nasos_TTW[i] = config_line.toInt();
+        }
+        config_file.close();
+    }
 }
