@@ -5,6 +5,8 @@
 #define STOP 0
 #define ERROR 2
 #define OFFLINE -1
+//время в течении которого будет снижаться частота приводов, секунды
+#define TIME_TO_STOP_PUMP 10
 
 #include <QTextStream>
 #include <qtextcodec.h>
@@ -70,6 +72,7 @@ struct data_struct{
     //PID
     double targetPos, Pparam, Dparam, Iparam, IntegratedError, LastPosition;
     int nasos[4];//состояние насоса
+    QString nasos_alarm_at_time[4];//время последней ошибки
     int nasos_TTW[4];//время наработки насоса
     int nasos_bit[4];
     int nasos_current_alarm_bit[4];

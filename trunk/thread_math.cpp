@@ -17,6 +17,7 @@
 #include "thread_math.h"
 
 bool rezerv_need_to_work;
+int last_pump = 0;
 
 //=========================================================================================================================================================
 Thread_math::Thread_math(MainWindow *wnd) : ui(wnd->ui), wnd(wnd){
@@ -67,31 +68,29 @@ int Thread_math::getminTTW(){
     return minindex;
 }
 //=========================================================================================================================================================
+//должен вызываться 1 раз в 1 секунду
 double Thread_math::PID(){
     double error, dTerm;
-    double currentPos, G_Dt;
+    double currentPos, G_Dt= 1 / 1000;// 1 second to mSec
     double result = 0;
 
-    //PID section
-            G_Dt = 1 / 1000;// 1 second
             //targetPos get from config file
             //Pparam, Dparam, Iparam get from config file
-            currentPos = wnd->data.max11616[10];
+            currentPos = wnd->data.level_to_show_sm;
             //IntegratedError накапливается со временем
     //проверим входной паказатель на предмет ошибки
-            if(currentPos >= 0 && currentPos <= 4096){
+            if(wnd->data.max11616[wnd->data.level_input_number] >= 0 && wnd->data.max11616[wnd->data.level_input_number] <= 4096){
                 error = wnd->data.targetPos - currentPos;
                 wnd->data.IntegratedError += error * G_Dt;
                 //constrain IntegratedError whith +/-window
-                //if(IntegratedError > )..... etc
                 dTerm = wnd->data.Dparam * (currentPos - wnd->data.LastPosition);
                 wnd->data.LastPosition = currentPos;
                 result = (wnd->data.Pparam * error) + (wnd->data.Iparam * wnd->data.IntegratedError) + dTerm;
             }else{
     //ошибочный, останавливаем мотор
-                qDebug() << QString("Thread_math::ERROR reading max11616[10] %1").arg(currentPos);
+                qDebug() << QString("Thread_math::ERROR reading max11616[10] %1").arg(wnd->data.max11616[wnd->data.level_input_number]);
                 //wnd->data.motor_need_to_stop = true;
-                //wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                //wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
             }
     return result;
 }
@@ -110,13 +109,16 @@ void Thread_math::start_one_more_pump(int i){
     wnd->data.pca9555_output1W |= (1<< wnd->data.nasos_bit[i]);
     //дадим команду частотнику на запуск
     if(wnd->data.isATV12){//частотник
-        wnd->data.freq_w[i] = 250;//по идее сюда частоту должен ПИД регулятор отдать
-        //wnd->data.freq_w[i] = 30;//по идее сюда частоту должен ПИД регулятор отдать
-        //тока нада учесть, что предыдущие приводы маслают на 50 гц, и только последний на ПИД
-        //wnd->data.freq_w[i] = constrain(wnd->data.freq_w[i] + PID());
+        for(int c=0;c<4;c++){
+            if(wnd->data.nasos[c] == 2){//насос работает
+                wnd->data.freq_w[c] = 500;//предыдущие насосы врубим на 50 Гц
+            }
+        }
+        wnd->data.freq_w[i] = 250;//последнему зададим начальную частоту
         wnd->data.stop[i] = false; wnd->data.start[i]= true;
         qDebug() << QString("start_one_more_pump: start %1").arg(i+1);
     }
+    last_pump = i;//фамилия последнего запущенного насоса
 }
 //=========================================================================================================================================================
 void Thread_math::run() {
@@ -170,20 +172,28 @@ void Thread_math::run() {
         //обработаем ошибки и выключим моторы
         if(wnd->data.nasos[0] == 0 || wnd->data.nasos[0] > 2){
             wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[0]);
+            wnd->data.nasos_alarm_at_time[0] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
         }
         if(wnd->data.nasos[1] == 0 || wnd->data.nasos[1] > 2){
             wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[1]);
+            wnd->data.nasos_alarm_at_time[1] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
         }
         if(wnd->data.nasos[2] == 0 || wnd->data.nasos[2] > 2){
             wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[2]);
+            wnd->data.nasos_alarm_at_time[2] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
         }
         if(wnd->data.nasos[3] == 0 || wnd->data.nasos[3] > 2){
             wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[3]);
+            wnd->data.nasos_alarm_at_time[3] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
         }
 //=========================================================================================================================================================
         for(int i=0;i<4;i++){
             if(wnd->data.nasos[i] == 2){
                 wnd->data.nasos_TTW[i]++;//время работы плюсанем
+                if(wnd->data.isATV12){
+                    //зададим частоту последнему включенному насосу с помощью ПИД
+                    constrain(wnd->data.freq_w[last_pump] + PID());//его надо звать раз в секунду
+                }
                 nasos_time_to_overtime[i]++;
                 if(nasos_time_to_overtime[i] > 900){//насос работает слишком долго
                     //сбросим время непрерывной работы насоса
@@ -203,14 +213,15 @@ void Thread_math::run() {
          if(wnd->data.max11616[wnd->data.level_input_number] == -1 ||                                              //АЦП не отвечает
             wnd->data.max11616[wnd->data.level_input_number] >= 3500 ||                                         //датчик в КЗ
             wnd->data.max11616[wnd->data.level_input_number] <  ((double)(wnd->data.level_empty_raw * 0.9)) ){//датчик отвалился
-               //проверим аварийный поплавок
+                wnd->data.level_to_show_sm = -1;
+             //проверим аварийный поплавок
                if( (wnd->data.pca9555_input0 & (1<<wnd->data.level_4_bit)) == 0 ){
                  //сработал датчик перелива
                 wnd->data.level_to_show = 0;
                 //старт моторам. х.з. сколько штук стартовать? 1? и потом через заданное время второй по nasos_time_to_overtime?
                 if(getkolvo() == 0){
                     start_one_more_pump(getminTTW());
-                    time_to_stop_overlevel_swimmer_pump = 900;//это из конфига считать, время работы насосов после отпускания поплавка перелива
+                    time_to_stop_overlevel_swimmer_pump = wnd->data.overlevel_time_to_stop;//считать, время работы насосов после отпускания поплавка перелива
                 }
                 //квакнем про отвал датчика уровня
                 if((wnd->data.error_flags & ERROR_LEVEL_METER)==0){
@@ -226,7 +237,7 @@ void Thread_math::run() {
                         //стоп моторам
                         if(wnd->data.time_to_stop == false){
                             wnd->data.motor_need_to_stop = true;
-                            wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                            wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
                         }
                     }
                 }
@@ -267,7 +278,7 @@ void Thread_math::run() {
             //стоп моторам
             if(wnd->data.time_to_stop == false){
                 wnd->data.motor_need_to_stop = true;
-                wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
             }
             qCritical("overlevel swimmer alarm");
            }else{*/
@@ -337,7 +348,7 @@ void Thread_math::run() {
                    //стоп моторам
                    if(wnd->data.time_to_stop == false){
                     wnd->data.motor_need_to_stop = true;
-                    wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                    wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
                    }
                    qCritical("alarm on unknown level swimmer");
                }
@@ -408,7 +419,7 @@ void Thread_math::run() {
                 if(getkolvo()){//есть насосы включенные?
                     if(wnd->data.motor_need_to_stop == false){
                         wnd->data.motor_need_to_stop = true;                // остановим моторы
-                        wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                        wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
                         qDebug("Level < level_1_sm, STOP motor");
                     }
                 }
@@ -460,7 +471,7 @@ void Thread_math::run() {
                 qDebug("Level < level_1_bit, STOP motor");
                 if(wnd->data.motor_need_to_stop == false){
                     wnd->data.motor_need_to_stop = true;                // остановим моторы
-                    wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                    wnd->data.time_to_stop = TIME_TO_STOP_PUMP;
                  }
             }
             //если уровень выше первого, но ниже второго - ничего не делаем
