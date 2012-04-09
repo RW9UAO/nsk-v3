@@ -170,22 +170,16 @@ void Thread_math::run() {
          }
       }
         //обработаем ошибки и выключим моторы
-        if(wnd->data.nasos[0] == 0 || wnd->data.nasos[0] > 2){
-            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[0]);
-            wnd->data.nasos_alarm_at_time[0] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
+      for(int i=0;i<4;i++){
+          if(wnd->data.nasos[i] == 0 || wnd->data.nasos[i] > 2){
+                wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[i]);
+                wnd->data.nasos_alarm_at_time[i] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
+            }
+          if(wnd->data.isATV12){
+            wnd->data.stop[i]=true;
+            wnd->data.start[i]=false;
         }
-        if(wnd->data.nasos[1] == 0 || wnd->data.nasos[1] > 2){
-            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[1]);
-            wnd->data.nasos_alarm_at_time[1] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
-        }
-        if(wnd->data.nasos[2] == 0 || wnd->data.nasos[2] > 2){
-            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[2]);
-            wnd->data.nasos_alarm_at_time[2] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
-        }
-        if(wnd->data.nasos[3] == 0 || wnd->data.nasos[3] > 2){
-            wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[3]);
-            wnd->data.nasos_alarm_at_time[3] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
-        }
+      }
 //=========================================================================================================================================================
         for(int i=0;i<4;i++){
             if(wnd->data.nasos[i] == 2){
