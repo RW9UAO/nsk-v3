@@ -130,9 +130,6 @@ void Thread_I2C::run() {
         if (wnd->dlgI2C->isVisible() ) {
             emit changeDataI2C();
         }
-        if( wnd->dlgCalibr->isVisible() ){
-            emit changeDataCalibr();
-        }
         //QThread::msleep(100);//0.1 second
         QThread::msleep(500);//0.5 second
     }

@@ -128,7 +128,8 @@ int main(int argc, char *argv[]){
                 &w, SLOT(onDataChangeI2C()),
                 Qt::QueuedConnection);
     QObject::connect(
-                &t3, SIGNAL(changeDataCalibr()),
+                //&t3, SIGNAL(changeDataCalibr()),
+                &t2, SIGNAL(changeDataCalibr()),
                 &w, SLOT(onDataChangeCalibr()),
                 Qt::QueuedConnection);
 //запустим потоки
