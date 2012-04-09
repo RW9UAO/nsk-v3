@@ -522,6 +522,9 @@ void Thread_math::run() {
         if(wnd->dlgNasos1->isVisible()){
             emit changeDataNasos1();
         }
+        //if( wnd->dlgCalibr->isVisible() ){
+        //    emit changeDataCalibr();
+        //}
 
         //ждем 1 секунду (на самом деле чуть больше)
         QThread::msleep(1000);

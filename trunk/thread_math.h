@@ -15,6 +15,7 @@ public:
 signals:
         void changeDataMain();
         void changeDataNasos1();
+        void changeDataCalibr();
 
 private:
         Ui::MainWindow *ui;
