@@ -46,7 +46,7 @@ int Thread_math::getkolvo(){
 //=========================================================================================================================================================
 //поиск насоса с минимальной наработкой, готового насоса (без алармов), вне резерва
 int Thread_math::getminTTW(){
-    int minval = wnd->data.nasos_TTW[0], minindex = -1;
+    int minval = 0xFFFFFF, minindex = -1;
     if(rezerv_need_to_work == true){//если нужно крутануть резервный насос
         for(int i=0;i<4;i++){
             if(wnd->data.nasos_rez[i]){//поищем резевный насос
@@ -55,13 +55,18 @@ int Thread_math::getminTTW(){
             }
         }
     }
-    //поищем с минимальной наработкой
+    //сначала выкинем все резевные
     for(int i = 0; i < 4; i++){
-        if(wnd->data.nasos_TTW[i] <= minval &&//если только < то при 0-й наработке вернет -1
-                wnd->data.nasos[i] == 1){       //в состоянии готовности
-            if( wnd->data.nasos_rez[i] == false){ //вне резерва
-                minval = wnd->data.nasos_TTW[i];
-                minindex = i;
+        if( wnd->data.nasos_rez[i] == false){ //вне резерва
+            //qDebug()<<QString("%1 not rezerv").arg(i+1);
+            //выкинем все невключенные
+            if( wnd->data.nasos[i] == 1){ //в состоянии готовности
+                //qDebug()<<QString("%1 ready").arg(i+1);
+                if( minval > wnd->data.nasos_TTW[i]){
+                    //qDebug()<<QString("%1 > %2").arg(minval).arg(i+1);
+                    minval = wnd->data.nasos_TTW[i];
+                    minindex = i;
+                }
             }
         }
     }
@@ -433,6 +438,7 @@ void Thread_math::run() {
                     if(i != -1){
                         //включим найденный насос
                         start_one_more_pump(i);
+                        qDebug()<<QString("Level > level_2_sm, START motor %1").arg(i+1);
                     }else qCritical("need to start first pump, but has no free. i`m cryng");
                 }
             }
@@ -446,7 +452,8 @@ void Thread_math::run() {
                     if(i != -1){
                         //включим найденный насос
                         start_one_more_pump(i);
-                    }else qCritical("need to start second pump, but has no free. Алярма!");
+                        qDebug()<<QString("Level > level_3_sm, START motor %1").arg(i+1);
+                    }else qCritical("need to start second pump, but has no free.");
                 }
             }
             //перелив, включим три насоса
@@ -455,6 +462,7 @@ void Thread_math::run() {
                     int i = getminTTW();
                     if(i != -1){
                         start_one_more_pump(i);//включим найденный насос
+                        qDebug()<<QString("Level > level_4_sm, START motor %1").arg(i+1);
                     }else qCritical("need to start 3 pump, but has no free.");
                 }
             }
@@ -505,6 +513,7 @@ void Thread_math::run() {
         if(seconds_counter0 >= (60 * 10) ){//60 sec * 10 min
             save_pump_ttw();
             seconds_counter0 = 0;
+            qDebug("writing pump times to disk.");
         }
         seconds_counter1++;
         if(seconds_counter1 >= (60 * 60)){//раз в час почистим флаги ошибок

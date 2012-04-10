@@ -56,7 +56,7 @@ void Thread_I2C::run() {
                 wnd->data.pca9555_output1R = line.toInt();
                 file.close();
                 if(wnd->data.pca9555_output1R != wnd->data.pca9555_output1W){
-                    qDebug("need to change pca9555:output1");
+                    qDebug()<<QString("need to change pca9555:output1 0x%1").arg(wnd->data.pca9555_output1R & wnd->data.pca9555_output1W, 0, 16);
                     file.setFileName(QString("/sys/bus/i2c/devices/%1-0021/output1").arg(wnd->data.pca9555ADDR) );
                     out.setDevice(&file);
                     if( file.open(QIODevice::WriteOnly) ){ // откроем файл для чтения

@@ -269,6 +269,19 @@ color: rgb(255, 255, 0);</string>
      <number>24</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="heart">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>250</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
