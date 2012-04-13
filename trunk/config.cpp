@@ -86,6 +86,7 @@ void MainWindow::set_defaults(void){
     for(int i=0;i<4;i++){
         this->data.nasos[i] = 0;
         this->data.nasos_TTW[i] = 0;
+        this->data.nasos_time_to_overtime[i] = 0;
         this->data.nasos_current_alarm_bit[i] = -1;
         this->data.nasos_temp_alarm_bit[i] = -1;
         this->data.nasos_bit[i] = -1;

@@ -74,6 +74,7 @@ struct data_struct{
     int nasos[4];//состояние насоса
     QString nasos_alarm_at_time[4];//время последней ошибки
     int nasos_TTW[4];//время наработки насоса
+    int nasos_time_to_overtime[4];//время непрерывной работы насоса.
     int nasos_bit[4];
     int nasos_current_alarm_bit[4];
     int nasos_temp_alarm_bit[4];

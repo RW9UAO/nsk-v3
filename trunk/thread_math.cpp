@@ -127,7 +127,6 @@ void Thread_math::start_one_more_pump(int i){
 }
 //=========================================================================================================================================================
 void Thread_math::run() {
-    int nasos_time_to_overtime[4]={0,0,0,0};//время непрерывной работы насоса.
     int seconds_counter0=0,seconds_counter1=0;
     int time_to_stop_overlevel_swimmer_pump=0;
 
@@ -193,10 +192,10 @@ void Thread_math::run() {
                     //зададим частоту последнему включенному насосу с помощью ПИД
                     constrain(wnd->data.freq_w[last_pump] + PID());//его надо звать раз в секунду
                 }
-                nasos_time_to_overtime[i]++;
-                if(nasos_time_to_overtime[i] > 900){//насос работает слишком долго
+                wnd->data.nasos_time_to_overtime[i]++;
+                if(wnd->data.nasos_time_to_overtime[i] > 900){//насос работает слишком долго
                     //сбросим время непрерывной работы насоса
-                    nasos_time_to_overtime[i] = 0;
+                    wnd->data.nasos_time_to_overtime[i] = 0;
                     int i = getminTTW();
                     if(i != -1){//может случиться так, что нет свободного насоса
                         //включим новый насос
@@ -366,7 +365,7 @@ void Thread_math::run() {
                                 wnd->data.stop[i]=true;
                                 wnd->data.start[i]=false;
                                 qDebug() << QString("motor_need_to_stop: ATV12 STOP %1").arg(i+1);
-                                nasos_time_to_overtime[i] = 0;//обнулим время непрерывной работы насоса
+                                wnd->data.nasos_time_to_overtime[i] = 0;//обнулим время непрерывной работы насоса
                                 i = 100500;// х.з. как тут break сработает или нет
                             }
                         }
