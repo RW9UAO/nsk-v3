@@ -24,6 +24,7 @@ void DialogATV12::updateDataATV12(){
 
  for(i = 0; i < 4; i++){
   if(this->data->lft[i] != -1){
+   if(this->data->isATV12){
     switch(this->data->lft[i]){// LFT - ATV12 has fault
     case 1: p[i]->setText("INF");break;
     case 3: p[i]->setText("CFF");break;
@@ -61,11 +62,38 @@ void DialogATV12::updateDataATV12(){
     case 106: p[i]->setText("LFF1");break;
     default: p[i]->setText("LFT OK");
     }
+   }
+   if(this->data->isSoftStart){
+       switch(this->data->lft[i]){
+       case 1: p[i]->setText("UCF");break;
+       case 2: p[i]->setText("OCF");break;
+       case 3: p[i]->setText("PHbd");break;
+       case 4: p[i]->setText("GrdF");break;
+       case 5: p[i]->setText("OLF");break;
+       case 6: p[i]->setText("OtF");break;
+       case 7: p[i]->setText("OHF");break;
+       case 8: p[i]->setText("PIF");break;
+       case 9: p[i]->setText("PHF");break;
+       case 10: p[i]->setText("USF");break;
+       case 11: p[i]->setText("OSF");break;
+       case 12: p[i]->setText("StF");break;
+       case 13: p[i]->setText("SnbF");break;
+       case 14: p[i]->setText("SSCr");break;
+       case 15: p[i]->setText("EtF");break;
+       case 16: p[i]->setText("InF");break;
+       case 17: p[i]->setText("SLF");break;
+       case 18: p[i]->setText("trAP");break;
+       case 19: p[i]->setText("SCF");break;
+       case 20: p[i]->setText("bPF");break;
+       case 21: p[i]->setText("CFF");break;
+       default: p[i]->setText("LFT OK");
+       }
+   }
   }else{
       p[i]->setText("--");
   }//end if( != -1)
 //покажем частоты
-  if(this->data->freq[i] != -1){
+  if(this->data->freq[i] != -1 && this->data->isATV12){
       QString s = QString("%1").arg((double)this->data->freq[i]/10);
       p1[i]->setText(s);
   }else{
