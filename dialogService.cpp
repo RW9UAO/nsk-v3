@@ -66,9 +66,6 @@ void DialogService::on_save_clicked(){
 
     //попробуем открыть /sys/block/sda
     if (QDir("/sys/block/sda").exists() ){
-//    QFile config_file("/sys/block/sda/stat");
-//    if( config_file.open(QIODevice::ReadOnly) ){ // откроем файл для чтения
-//        config_file.close();
         //попробуем смонтировать
         qDebug("mount /dev/sda1 /mnt");
         QStringList arguments; QProcess myProcess; QString program;
@@ -130,4 +127,13 @@ void DialogService::on_save_clicked(){
         msgBox.exec();
         qDebug("/dev/sda not found");
     }
+}
+
+void DialogService::on_update_clicked(){
+    QFile config_file("rebootflag");
+    config_file.open(QIODevice::WriteOnly); // откроем файл для чтения
+    config_file.close();
+
+    this->data->tempstr = "killall";//попросим вызывавшего нас тоже завершиться
+    this->close();
 }

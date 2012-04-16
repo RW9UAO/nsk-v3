@@ -65,7 +65,8 @@ FORMS    += mainwindow.ui \
 DEFINES += APP_VERSION=$$VERSION
 
 OTHER_FILES += \
-    config.txt
+    config.txt \
+    start
 
 RESOURCES += \
     resource.qrc

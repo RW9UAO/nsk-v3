@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export TSLIB_CALIBFILE=/nand/pointercal
+
+
+export LD_LIBRARY_PATH=/nand/lib:$LD_LIBRARY_PATH
+export QT_QWS_FONTDIR=/nand/lib/fonts
+export QWS_MOUSE_PROTO="Tslib:/dev/input/event0"
+export QWS_DISPLAY=LinuxFb:mmWidth=120:mmHeight=80
+#ts_calibrate
+./nsk_v3 -qws
+while [ -e rebootflag]; do
+    rm rebootflag
+    ./nsk_v3 -qws
+done
