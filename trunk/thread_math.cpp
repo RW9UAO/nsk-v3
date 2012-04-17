@@ -178,11 +178,12 @@ void Thread_math::run() {
           if(wnd->data.nasos[i] == 0 || wnd->data.nasos[i] > 2){
                 wnd->data.pca9555_output1W &= ~(1<<wnd->data.nasos_bit[i]);
                 wnd->data.nasos_alarm_at_time[i] = QDateTime::currentDateTime().toString("dd.MM.yy/hh:mm:ss");
+                qDebug()<<QString("thread_math: alarm %1 at pump %2").arg(wnd->data.nasos[i]).arg(i+1);
+                if(wnd->data.isATV12){
+                  wnd->data.stop[i]=true;
+                  wnd->data.start[i]=false;
+              }
             }
-          if(wnd->data.isATV12){
-            wnd->data.stop[i]=true;
-            wnd->data.start[i]=false;
-        }
       }
 //=========================================================================================================================================================
         for(int i=0;i<4;i++){

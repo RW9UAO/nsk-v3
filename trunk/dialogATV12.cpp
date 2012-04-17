@@ -101,7 +101,7 @@ void DialogATV12::updateDataATV12(){
   }
   //покажем токи
     if(this->data->current[i] != -1){
-        QString s = QString("%1").arg(this->data->current[i]);
+        QString s = QString("%1").arg((double)this->data->current[i]/10);
         p2[i]->setText(s);
     }else{
         p2[i]->setText("--");
