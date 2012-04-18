@@ -158,16 +158,25 @@ void Thread_math::run() {
                 if(wnd->data.pca9555_output1R & (1<< wnd->data.nasos_bit[i]) ){
                     wnd->data.nasos[i] = 2;//включен, работает
                 }
-            }
+            }                     
             if(wnd->data.max11616[wnd->data.nasos_current_alarm_bit[i]] > wnd->data.nasos_current_alarm_border[i]){
                 wnd->data.nasos[i] = 3;//авария по току
             }
-            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_temp_alarm_border[i]){
+            //правка от Анны begin
+/*            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_temp_alarm_border[i]){
                 wnd->data.nasos[i] = 4;//авария по температуре
             }
             if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > wnd->data.nasos_wet_alarm_border[i]){
                 wnd->data.nasos[i] = 5;//авария по влажности
             }
+*/
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < wnd->data.nasos_temp_alarm_border[i]){
+                           wnd->data.nasos[i] = 4;//авария по температуре
+            }
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < wnd->data.nasos_wet_alarm_border[i]){
+                           wnd->data.nasos[i] = 5;//авария по влажности
+            }
+            //правка от Анны end
             if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] > 4000 || wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < 1000){
                 wnd->data.nasos[i] = 6;//авария по обрыву кабеля
             }
@@ -250,7 +259,8 @@ void Thread_math::run() {
              double b = (double)wnd->data.level_full_raw - (double)wnd->data.level_empty_raw;
              double c = a / b;
              double d = c * (double)wnd->data.level_full_sm;
-             wnd->data.level_to_show_sm = d;
+             //wnd->data.level_to_show_sm = d; //КНС
+             wnd->data.level_to_show_sm = wnd->data.level_full_sm - d;//СПД
            if(wnd->data.level_to_show_sm < wnd->data.level_1_sm){
                wnd->data.level_to_show = 2;
            }
