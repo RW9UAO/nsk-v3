@@ -1,0 +1,8 @@
+[14:37:46] anna: в thread_math
+ поправила вот два знака сравнения 
+if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < wnd->data.nasos_temp_alarm_border[i]){
+                wnd->data.nasos[i] = 4;//авария по температуре
+            }
+            if(wnd->data.max11616[wnd->data.nasos_temp_alarm_bit[i]] < wnd->data.nasos_wet_alarm_border[i]){
+                wnd->data.nasos[i] = 5;//авария по влажности
+            }
