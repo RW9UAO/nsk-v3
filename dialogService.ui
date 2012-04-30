@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>480</width>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,11 +56,14 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>120</x>
      <y>10</y>
      <width>221</width>
      <height>17</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 255, 0);</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -76,7 +79,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>Quit prog</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
@@ -103,6 +106,19 @@
    </property>
    <property name="value">
     <number>24</number>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>92</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Главная</string>
    </property>
   </widget>
  </widget>

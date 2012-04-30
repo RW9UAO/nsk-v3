@@ -227,7 +227,10 @@ color: rgb(255, 255, 0);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Установки</string>
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="service">
@@ -240,20 +243,10 @@ color: rgb(255, 255, 0);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Сервис</string>
+     <string/>
     </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>240</y>
-      <width>92</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Общие</string>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">

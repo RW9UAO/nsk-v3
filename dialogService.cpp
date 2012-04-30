@@ -137,3 +137,7 @@ void DialogService::on_update_clicked(){
     this->data->tempstr = "killall";//попросим вызывавшего нас тоже завершиться
     this->close();
 }
+
+void DialogService::on_pushButton_3_clicked(){
+    this->close();
+}

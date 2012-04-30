@@ -5,9 +5,16 @@
 
 DialogSetupGeneral::DialogSetupGeneral(data_struct * d, QWidget *parent) : QDialog(parent), dui(new Ui::DialogSetupGeneral){
     dui->setupUi(this);
-
     this->data = d;
-    setStyleSheet("QDialog{background-color: rgb(190,190,190); }");
+
+    //this->setAttribute(Qt::WA_TranslucentBackground);
+    //this->setAttribute(Qt::WA_TintedBackground);
+    //this->setAttribute(Qt::WA_StyledBackground);
+    //this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::FramelessWindowHint);
+    //this->setStyleSheet("QDialog{background-color: rgb(255,255,255);}");
+    //this->setWindowOpacity(1);
+    //this->setStyleSheet("background-color:rgb(190,190,190);");
+
     dui->pushButton_2->setText(QString("%1").arg(this->data->KNSnumber));
     dui->pushButton_3->setText(QString("%1").arg(this->data->pca9555ADDR));
     dui->pushButton_4->setText(QString("%1").arg(this->data->max11616ADDR));

@@ -76,8 +76,7 @@ private slots:
     void on_Nasos4_clicked();
     void on_setup_clicked();
     void on_service_clicked();
-
-    void on_pushButton_clicked();
+    //void on_pushButton_clicked();
 
 public slots:
     void onDataChangeATV12();

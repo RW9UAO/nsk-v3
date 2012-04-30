@@ -17,7 +17,6 @@ public:
     ~DialogSetup();
 
     void updateDataSetup();
-
 private:
     Ui::DialogSetup *dui;
     data_struct * data;
@@ -30,6 +29,7 @@ private slots:
     void on_P2_clicked();
     void on_P3_clicked();
     void on_P4_clicked();
+    void on_general_clicked();
 };
 
 #endif // DIALOGSETUP_H
