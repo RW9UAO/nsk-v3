@@ -24,6 +24,12 @@ struct data_struct{
 #define ERROR_LEVEL_METER 1<<7
 #define ALARM_OVERLEVE 1<<8
 #define ALARM_220 1<<9
+#define ALARM_PUMP1 1<<10
+#define ALARM_PUMP2 1<<11
+#define ALARM_PUMP3 1<<12
+#define ALARM_PUMP4 1<<13
+    bool isKNS;
+    bool isSPD;
     bool isSoftStart;//плавный пуск есть?
     QString tempstr;//переменная для обмена с диалогами
     int dialogparam;//передадим параметр в диалог
