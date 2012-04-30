@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);
+</string>
+  </property>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
@@ -29,7 +33,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Главная</string>
+    <string>Выход</string>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget748">
