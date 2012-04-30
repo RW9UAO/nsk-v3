@@ -60,6 +60,7 @@ void MainWindow::set_defaults(void){
     double_parameters["PIDtarget"] = &this->data.targetPos;    double_parameters["PID_P"] = &this->data.Pparam;
     double_parameters["PID_I"] = &this->data.Iparam;    double_parameters["PID_D"] = &this->data.Dparam;
 
+    this->data.isKNS = this->data.isSPD = false;
     this->data.servicemode = false;
     //this->data.servicemode = true;
     this->data.IPboardAddr = "10.10.3.120";
@@ -242,6 +243,22 @@ do {
                 this->data.isSoftStart = false;
         }
     }
+    if (config_line.contains("typeKNS") ){
+        if (config_line.contains("yes") ){
+                this->data.isKNS = true;
+                qDebug("KHC mode");
+        }else{
+                this->data.isKNS = false;
+        }
+    }
+    if (config_line.contains("typeSPD") ){
+        if (config_line.contains("yes") ){
+                this->data.isSPD = true;
+                qDebug("SPD mode");
+        }else{
+                this->data.isSPD = false;
+        }
+    }
     if (config_line.contains("nasos_rez0") ){
         if (config_line.contains("yes") ) this->data.nasos_rez[0] = true;
         else                              this->data.nasos_rez[0] = false;
@@ -268,6 +285,14 @@ config_file.close();                           // закроем конфигу�
 .arg(this->data.nasos1_wet_alarm_border).arg(this->data.nasos2_wet_alarm_border).arg(this->data.nasos3_wet_alarm_border).arg(this->data.nasos4_wet_alarm_border);*/
 
 //qDebug() << QString("levels:\n%1 %2 %3 %4\n%5 %6 %7 %8\n%9 %10 %11 %12") it`s too looong
+
+
+if(this->data.isKNS == false && this->data.isSPD == false){
+    qCritical("ERROR setting type KNS/SPD");
+}
+if(this->data.isKNS == true && this->data.isSPD == true){
+    qCritical("ERROR setting type KNS/SPD");
+}
 
 }else{
   QMessageBox msgBox;

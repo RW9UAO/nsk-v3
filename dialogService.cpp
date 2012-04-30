@@ -45,7 +45,7 @@ void DialogService::on_ButtonEnterService_clicked(){
             this->data->tempstr[5] == this->data->KNSnumber[0]){
             dui->label->setText("Сервисный режим включен");
             this->data->servicemode = true;
-            this->data->servicemodeTTL = 30;//секунд
+            this->data->servicemodeTTL = 30 * 60;//секунд
         }else{
             dui->label->setText("Неправильный пароль");
         }
