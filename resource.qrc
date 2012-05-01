@@ -42,5 +42,6 @@
         <file>pict/nasosred_k.gif</file>
         <file>pict/datchik_green.gif</file>
         <file>pict/datchik_red.gif</file>
+        <file>pict/black.gif</file>
     </qresource>
 </RCC>

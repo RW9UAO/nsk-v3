@@ -13,7 +13,15 @@ DialogSetupGeneral::DialogSetupGeneral(data_struct * d, QWidget *parent) : QDial
     //this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::FramelessWindowHint);
     //this->setStyleSheet("QDialog{background-color: rgb(255,255,255);}");
     //this->setWindowOpacity(1);
-    //this->setStyleSheet("background-color:rgb(190,190,190);");
+    this->setStyleSheet("QDialog{background-image: url(:/pict/pict/black.gif);}");
+    //this->setStyleSheet("color:rgb(255,255,255);");
+    dui->label->setStyleSheet("color:rgb(255,255,255);");    dui->label_2->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_3->setStyleSheet("color:rgb(255,255,255);");    dui->label_4->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_5->setStyleSheet("color:rgb(255,255,255);");    dui->label_6->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_7->setStyleSheet("color:rgb(255,255,255);");    dui->label_8->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_9->setStyleSheet("color:rgb(255,255,255);");    dui->label_10->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_11->setStyleSheet("color:rgb(255,255,255);");    dui->label_12->setStyleSheet("color:rgb(255,255,255);");
+    dui->label_13->setStyleSheet("color:rgb(255,255,255);");    dui->label_14->setStyleSheet("color:rgb(255,255,255);");
 
     dui->pushButton_2->setText(QString("%1").arg(this->data->KNSnumber));
     dui->pushButton_3->setText(QString("%1").arg(this->data->pca9555ADDR));
