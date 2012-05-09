@@ -25,6 +25,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
@@ -45,6 +48,9 @@
      <width>480</width>
      <height>245</height>
     </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/pict/pict/black.gif);</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
