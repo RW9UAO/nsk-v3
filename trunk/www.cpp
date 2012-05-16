@@ -64,13 +64,31 @@ void FortuneServer::readClient(){
                 if (tokens[1] == "/"){/*
                     os << "<h1>Nothing to see here</h1>\n"
                       << QDateTime::currentDateTime().toString() << "<BR>\n";*/
-                    os << "<img src=\"pict/pult_fon.gif\"width=\"480\" height=\"272\">"
-                      "<BR>";
-                    os << tr("<p><a href=\"/?page=alarm\">Как сделать такое же фото?</a></p>");
+                    os << "<table bordercolor=\"red\" border=\"1\" background=\"pict/pult_fon.gif\"width=\"480\" height=\"272\">\n"
+                          "<tr height=\"20\">\n";
+                    os << tr("<td width=\"100\"></td>\n"
+                             "<td width=\"100\"><form><button name=\"page\" formaction=\"\" formmethod=\"GET\" type=\"submit\" value=\"setup\">Установки</button></form></td>\n"
+                             "<td width=\"100\"><form><button name=\"page\" formaction=\"\" formmethod=\"GET\" type=\"submit\" value=\"service\">Сервис</button></form></td>\n"
+                             "<td></td>\n");
+                    os << "</tr>"
+                          "<tr>"
+                            "<td><a href=\"/?page=alarm\"><img src=\"pict/log_avarij_red.gif\"></a></td> <td>...</td>"
+                          "</tr>"
+                          "</table>"
+                      "<BR>\n";
+                    os << tr("<p><a href=\"/?page=alarm\">Как сделать такое же фото?</a></p>\n");
                 }
                 //alarm page
                 if ( tokens[1].contains("page=alarm") ){
-                    os << tr("<p><a href=\"/\">Back to main</a></p>");
+                    os << tr("alarm page<p><a href=\"/\">Back to main</a></p>");
+                }
+                //setup page
+                if ( tokens[1].contains("page=setup") ){
+                    os << tr("setup page<p><a href=\"/\">Back to main</a></p>");
+                }
+                //service page
+                if ( tokens[1].contains("page=service") ){
+                    os << tr("service page<p><a href=\"/\">Back to main</a></p>");
                 }
             }
             //закроем соединение
@@ -80,6 +98,10 @@ void FortuneServer::readClient(){
                 delete socket;
             }
         }//if (tokens[0] == "GET") {
+        else{
+            qDebug() << "unknown " << tokens[0];
+            for (QList<QString>::iterator i = tokens.begin(); i != tokens.end(); ++i){qDebug() << (*i); }
+        }
     }
 }
 void FortuneServer::incomingConnection(int socketDescriptor){
