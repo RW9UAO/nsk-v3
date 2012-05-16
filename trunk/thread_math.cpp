@@ -223,7 +223,8 @@ void Thread_math::run() {
                     wnd->data.freq_w[last_pump] = constrain(freq);
                 }
                 wnd->data.nasos_time_to_overtime[i]++;
-                if(wnd->data.nasos_time_to_overtime[i] > 900){//насос работает слишком долго
+                //if(wnd->data.nasos_time_to_overtime[i] > 900){//насос работает слишком долго
+                if(wnd->data.nasos_time_to_overtime[i] > wnd->data.pump_time_to_overtime){//насос работает слишком долго
                     //сбросим время непрерывной работы насоса
                     wnd->data.nasos_time_to_overtime[i] = 0;
                     int i = getminTTW();

@@ -55,6 +55,7 @@ void MainWindow::set_defaults(void){
     int_parameters["overlevel_time_to_stop"] = &this->data.overlevel_time_to_stop;
     int_parameters["nasos_param_index0"] = &this->data.nasos_param_index[0];    int_parameters["nasos_param_index1"] = &this->data.nasos_param_index[1];
     int_parameters["nasos_param_index2"] = &this->data.nasos_param_index[2];    int_parameters["nasos_param_index3"] = &this->data.nasos_param_index[3];
+    int_parameters["pump_time_to_overtime"] = &this->data.pump_time_to_overtime;
     //int_parameters[""] = &this->data.;
 
     double_parameters["PIDtarget"] = &this->data.targetPos;    double_parameters["PID_P"] = &this->data.Pparam;
@@ -144,6 +145,7 @@ void MainWindow::set_defaults(void){
         this->data.nasos_param[i].pictname = config_in.readLine() + ".gif";
         config_file.close();
     }
+    this->data.pump_time_to_overtime = 900;//время по умолчанию до включения следующего насоса
 }
 //========================================================================================================================
 double get_double_from_config(QString config_line){

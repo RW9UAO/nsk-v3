@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     dialogSetup.cpp \
     dialogSetupGeneral.cpp \
     dialogCalibr.cpp \
-    dialogNasosParamerer.cpp
+    dialogNasosParamerer.cpp \
+    www.cpp
 
 HEADERS  += mainwindow.h \
     thread_485.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     dialogSetup.h \
     dialogSetupGeneral.h \
     dialogCalibr.h \
-    dialogNasosParameter.h
+    dialogNasosParameter.h \
+    www.h
 
 FORMS    += mainwindow.ui \
     dialogATV12.ui \

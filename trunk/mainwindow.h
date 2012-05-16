@@ -25,6 +25,7 @@
 #include "dialogCalibr.h"
 #include "dialogNasosParameter.h"
 #include "data_struct.h"
+#include "www.h"
 
 namespace Ui {
     class MainWindow;
@@ -63,7 +64,8 @@ public:
 
     data_struct data;
     bool done;
-
+private:
+    FortuneServer HTTPserver;
 private slots:
     void on_ShowDialogATV12_clicked();
     void on_ShowDialogCE303_clicked();

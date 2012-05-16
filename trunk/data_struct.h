@@ -109,6 +109,7 @@ struct data_struct{
     bool need_to_save_config;//надо записать конфиг
     //bool nasos1_on,nasos2_on,nasos3_on,nasos4_on;//признак включенного насоса
     bool nasos_rez[4];//признак резервного насоса
+    int pump_time_to_overtime;
 };
 
 #endif // DATA_STRUCT_H
