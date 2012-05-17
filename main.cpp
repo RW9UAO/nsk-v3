@@ -13,7 +13,7 @@
 #include "thread_485.h"
 #include "thread_I2C.h"
 #include "thread_math.h"
-
+#include "www.h"
 
 // Данные для ведения логов
 static QTextStream* logStream;
