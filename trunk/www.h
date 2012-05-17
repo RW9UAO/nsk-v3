@@ -7,10 +7,12 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QObject>
+#include "data_struct.h"
+#include "mainwindow.h"
 
+//struct data_struct;
 
-class FortuneServer : public QTcpServer
-{
+class FortuneServer : public QTcpServer{
     Q_OBJECT
 
 public:
@@ -22,7 +24,7 @@ public slots:
 protected:
     void incomingConnection(int socketDescriptor);
 private:
-    QStringList fortunes;
-
+    //QStringList fortunes;
+    data_struct * data;
 };
 #endif // WWW_H
