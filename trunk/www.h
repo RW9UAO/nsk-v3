@@ -16,10 +16,13 @@ class FortuneServer : public QTcpServer{
     Q_OBJECT
 
 public:
-    FortuneServer(QObject *parent = 0);
+    FortuneServer(data_struct * dataStruct, QObject *parent = 0);
 public slots:
             void readClient();
             void discardClient();
+            void main_window(QTcpSocket* socket);
+            void alarm_window(QTcpSocket* socket);
+            void setup_window(QTcpSocket* socket);
 
 protected:
     void incomingConnection(int socketDescriptor);
