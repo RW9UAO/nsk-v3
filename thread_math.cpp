@@ -615,9 +615,13 @@ if(wnd->data.isSPD){
         //    emit changeDataCalibr();
         //}
 
-
+#if defined(ARM)
+#else
 wnd->data.nasos[3-1] = 1;
-
+wnd->data.nasos[2-1] = 2;
+wnd->data.nasos[1-1] = 3;
+wnd->data.nasos[4-1] = 4;
+#endif
         //ждем 1 секунду (на самом деле чуть больше)
         QThread::msleep(1000);
 

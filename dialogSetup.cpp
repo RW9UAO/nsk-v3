@@ -6,9 +6,6 @@
 DialogSetup::DialogSetup(data_struct * d, QWidget *parent) : QDialog(parent), dui(new Ui::DialogSetup){
     dui->setupUi(this);
     this->data = d;
-    //this->setWindowFlags(Qt::FramelessWindowHint);
-    //this->updatesEnabled();
-    //this->updatesEnabled();
     dui->P1->setText(QString("%1").arg(this->data->level_1_sm));
     dui->P2->setText(QString("%1").arg(this->data->level_2_sm));
     dui->P3->setText(QString("%1").arg(this->data->level_3_sm));
@@ -25,6 +22,8 @@ DialogSetup::DialogSetup(data_struct * d, QWidget *parent) : QDialog(parent), du
         dui->P3->setStyleSheet("background-image: url(none);color:rgb(0,0,0)");
         dui->P4->setStyleSheet("background-image: url(none);color:rgb(0,0,0)");
     }
+    if(this->data->isKNS) dui->type->setText("Станция КНС");
+    if(this->data->isSPD) dui->type->setText("Станция СПД");
 }
 
 DialogSetup::~DialogSetup(){
@@ -120,4 +119,15 @@ void DialogSetup::on_P4_clicked(){
             qDebug("error on poplavok4 user input");
         }
     }
+}
+
+void DialogSetup::on_general_clicked(){
+    QDialog * d_key = new DialogSetupGeneral(this->data, this);
+    QPoint pos = d_key->pos();
+    pos.setX(0);    pos.setY(0);    d_key->move(pos);
+    //d_key->setWindowFlags(Qt::WindowTitleHint);
+    //d_key->setStyleSheet("background-color:rgb(255,255,255);");
+    d_key->setWindowFlags(Qt::FramelessWindowHint);
+    //d_key->setStyleSheet("QDialog{background-color:rgb(0,0,200);}");
+    d_key->exec();
 }

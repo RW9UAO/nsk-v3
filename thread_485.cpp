@@ -1,4 +1,6 @@
 #include <QtDebug>
+#include <QDate>
+#include <QTime>
 #include <qtextcodec.h>
 #include <errno.h>
 #include <sys/time.h>
@@ -202,10 +204,24 @@ unsigned char BCC, tempbuf[200], c=0;
     bytes_to_send = s;
     if (Posix_File->write((const char *)buffer, bytes_to_send) != bytes_to_send){     return -1;    }
     Posix_File->flush();
+
     QThread::msleep(CE303wait);
     wrb = Posix_File->read((char *)buffer, 250);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
-  //strcpy((char *)buffer, "220.10\r\n221.22\r\n222.333\r\n"); return 0;
+/*/добавим скорости. не работает =(
+    QThread::msleep(50);
+    wrb = Posix_File->read((char *)buffer, 250);
+    int to = 30;
+    while(to){
+        to--;
+        if(wrb > 3 && buffer[wrb - 2] == ETX){
+            to = 0;
+        }
+        QThread::usleep(100);
+        wrb += Posix_File->read((char *)&buffer[wrb-1], 250);
+    }
+*/
+    //strcpy((char *)buffer, "220.10\r\n221.22\r\n222.333\r\n"); return 0;
 //    qDebug() << QString("CE303: %1 %2").arg(wrb).arg(QLatin1String((const char *)buffer));
     if(wrb == -1){     return -1;    }
     if(wrb == 1 && buffer[0] == 0x06){/*qDebug("ce303:ACK");*/return 0;}
@@ -224,7 +240,8 @@ unsigned char BCC, tempbuf[200], c=0;
     }
     memcpy(buffer, tempbuf, c);                         // вернем буфер
     buffer[c+1] = 0;
-return 0;
+//QThread::msleep(10);
+    return 0;
 }
 //--------------------------------------------------------------------------------------
 // открыть канал связи к счетчику СЕ303, используем адрес/пароль по умлочанию
@@ -334,7 +351,7 @@ wnd->done = true;
 }//--------------------------------------------------------------------------------------
 void Thread_485::run() {
     int ce303offline = 0;
-    qDebug() << "Thread_485::run";
+//    qDebug() << "Thread_485::run";
 // откроем 485-й порт
     Posix_File = new QFile("/dev/ttyS1");
     if (!Posix_File->open(QIODevice::ReadWrite)){
@@ -346,9 +363,9 @@ void Thread_485::run() {
     }
 
 //если есть частотник - закинем начальные настройки
-    if(wnd->isATV12){
+    if(wnd->data.isATV12){
         set_8N1();
-        for(int temp=1;temp<7;temp++){
+        for(int temp=1;temp<4;temp++){
             write_modbus_reg(temp, 8401, 2);//CHCF = SEP
             write_modbus_reg(temp, 8413, 164);//FR1 = MDB
             write_modbus_reg(temp, 8423, 10);//CD1 = MDB
@@ -404,10 +421,10 @@ void Thread_485::run() {
 //-----------*/
 //---------------------------------------
         //считаем показатели частотников
-        if(wnd->isATV12){
+        if(wnd->data.isATV12){
              set_8N1();
 // по идее, тут надо использовать mutex, чтобы остальные процедуры не получили битые данные
-        for(int i = 0; i < wnd->ATV12maxNum; i++){
+        for(int i = 0; i < wnd->data.ATV12maxNum; i++){
             //read LFT
             wnd->data.lft[i] = read_modbus_reg(i + 1, 0x1BD1);// i+1 - т.к. цикл с 0 и индексы тоже с 0
             if(wnd->data.lft[i] != OFFLINE){//если не ответил, не будем тратить время
@@ -416,8 +433,9 @@ void Thread_485::run() {
 //                qDebug() << QString("atv12:ETA %1 = 0x%2").arg(i+1).arg(wnd->data.eta[i],0,16);
 //                qDebug() << QString("atv12:ETA & 0x0F 0x%1").arg(wnd->data.eta[i] & 0x0f,0,16);
                 // тут надо выставлять флаги - привод RUN/STOP/ERROR
+                //надо пошарить по регистрам найти конкретные за run|stop
                 if(wnd->data.eta[i] != OFFLINE){
-                    if(wnd->data.eta[i] == 0x250 || wnd->data.eta[i] == 0x217){
+                    if(wnd->data.eta[i] == 0x250 || wnd->data.eta[i] == 0x217 || wnd->data.eta[i] == 0x233){
                         wnd->data.ATV12status[i] = STOP;
                     }else
                     if((wnd->data.eta[i] & 0x3FF) == 0x237){
@@ -439,20 +457,46 @@ void Thread_485::run() {
                 wnd->data.freq[i] = OFFLINE;
                 wnd->data.current[i] = OFFLINE;
                 wnd->data.ATV12status[i] = OFFLINE;
+                switch(i){
+                case 0:
+                    if((wnd->data.error_flags & ERROR_ATV12_1) == 0){
+                        wnd->data.error_flags |= ERROR_ATV12_1;
+                        qCritical("ATV12 at adrr 1 offline");
+                    }
+                    break;
+                case 1:
+                    if((wnd->data.error_flags & ERROR_ATV12_2) == 0){
+                        wnd->data.error_flags |= ERROR_ATV12_2;
+                        qCritical("ATV12 at adrr 2 offline");
+                    }
+                    break;
+                case 2:
+                    if((wnd->data.error_flags & ERROR_ATV12_3) == 0){
+                        wnd->data.error_flags |= ERROR_ATV12_3;
+                        qCritical("ATV12 at adrr 3 offline");
+                    }
+                    break;
+                case 3:
+                    if((wnd->data.error_flags & ERROR_ATV12_4) == 0){
+                        wnd->data.error_flags |= ERROR_ATV12_4;
+                        qCritical("ATV12 at adrr 4 offline");
+                    }
+                    break;
+                }
             }
         }
 //а тут отпустить mutex
 //пройдемся по кнопкам старт/стоп
-        for(int i = 0; i < wnd->ATV12maxNum; i++){
+        for(int i = 0; i < wnd->data.ATV12maxNum; i++){
             if( wnd->data.ATV12status[i] == ERROR){
-                qDebug() << QString("try to reset error %1").arg(i+1);
+                qDebug() << QString("Thread_485: try to reset error %1").arg(i+1);
                 write_modbus_reg(i + 1, 8501, 0x80);//try to fault reset
                 //write_modbus_reg(i + 1, 8501, 0x0002);//quick STOP
                 write_modbus_reg(i + 1, 8501, 0x0000);//STOP
             }
             //получена команда СТАРТ и мотор остановлен
             if(wnd->data.start[i] && wnd->data.ATV12status[i] == STOP){
-                qDebug() << QString("try to START %1").arg(i+1);
+                qDebug() << QString("Thread_485: start %1").arg(i+1);
                 write_modbus_reg(i + 1, 8501, 0x0006);//enable
                 write_modbus_reg(i + 1, 8501, 0x0007);//enable
                 write_modbus_reg(i + 1, 8501, 0x000F);//enable, forward, RUN asked
@@ -461,21 +505,70 @@ void Thread_485::run() {
             if(wnd->data.stop[i]){
                 //write_modbus_reg(i + 1, 8501, 0x0002);//quick STOP
                 write_modbus_reg(i + 1, 8501, 0x0000);//STOP
+                //qDebug() << QString("thread485: stop at drive %1").arg(i+1);
             }
-            if( wnd->data.freq[i] !=  wnd->data.freq_w[i] && wnd->data.freq[i] != -1){
-                qDebug() << QString("new freq %1 at drive %2").arg(wnd->data.freq_w[i]).arg(i+1);
+            //частоту задаем если была команда старт
+            if( wnd->data.freq[i] !=  wnd->data.freq_w[i] && wnd->data.freq[i] != -1 && wnd->data.start[i]){
+                qDebug() << QString("thread485: new freq %1 at drive %2").arg(wnd->data.freq_w[i]).arg(i+1);
                 write_modbus_reg(i + 1, 8502, wnd->data.freq_w[i]);
             }
         }
         //wnd->data.freq[0]++;
         //обновим показания диалога ATV12
-        if (NULL != wnd->dlgATV12.get()) {
-            emit changeDataATV12();
-        }
+//        if(wnd->dlgATV12->isVisible()) {
+//            emit changeDataATV12();
+//        }
         }//if(wnd->isATV12){
+//        else{ QThread::msleep(100);}
 //---------------------------------------
+        //почитаем плавный пуск
+        if(wnd->data.isSoftStart){
+            set_8N1();
+            for(int i = 0; i < wnd->data.ATV12maxNum; i++){
+                wnd->data.lft[i] = read_modbus_reg(i + 1, 0x117);//считаем LFT
+                if(wnd->data.lft[i] != -1){
+                    wnd->data.current[i] = read_modbus_reg(i + 1, 257);//LCR1 ток в Амперах
+                //269 регистр однозначно скажет о состоянии RUN/STOP
+//d4: COMM LED (0=OFF,1=ON)
+//d6: Ready LED (0=OFF,1=ON)
+//d7: Run LED (0=OFF,1=ON). Мигание во время разгона/контролируемого торможения
+//d8: Trip LED (0=OFF,1=ON)
+                }else{
+                    wnd->data.eta[i] = OFFLINE;
+                    wnd->data.freq[i] = OFFLINE;
+                    wnd->data.current[i] = OFFLINE;
+                    wnd->data.ATV12status[i] = OFFLINE;
+                    switch(i){
+                    case 0:
+                        if((wnd->data.error_flags & ERROR_ATV12_1) == 0){
+                            wnd->data.error_flags |= ERROR_ATV12_1;
+                            qCritical("ATS22 at adrr 1 offline");
+                        }
+                        break;
+                    case 1:
+                        if((wnd->data.error_flags & ERROR_ATV12_2) == 0){
+                            wnd->data.error_flags |= ERROR_ATV12_2;
+                            qCritical("ATS22 at adrr 2 offline");
+                        }
+                        break;
+                    case 2:
+                        if((wnd->data.error_flags & ERROR_ATV12_3) == 0){
+                            wnd->data.error_flags |= ERROR_ATV12_3;
+                            qCritical("ATS22 at adrr 3 offline");
+                        }
+                        break;
+                    case 3:
+                        if((wnd->data.error_flags & ERROR_ATV12_4) == 0){
+                            wnd->data.error_flags |= ERROR_ATV12_4;
+                            qCritical("ATS22 at adrr 4 offline");
+                        }
+                        break;
+                    }
+                }
+            }
+         }
 //считаем показания счетчика
-        if(wnd->isCE303){
+        if(wnd->data.isCE303){
             set_7P1();              // переключим режим УАРТа
             if(openCE303() != -1){  // первый раз канал открывается нормально
                 int ttry = 3;       // читается после открытия - нормально
@@ -502,6 +595,27 @@ void Thread_485::run() {
                 if(request("TIME_()") != -1){ // текущее время
                     QTextStream t((const char*)buffer);
                     wnd->data.time_ = t.readLine();
+                    if(wnd->data.need_to_set_date_time_fromCE303 &&//если есть флаг установки времени
+                            wnd->data.date_ != "--"){//и дата правильная
+                        wnd->data.need_to_set_date_time_fromCE303 = false;
+                        //установим системное время/дату
+                        QString  mm, dd, HH, MM, yy;
+                        dd[0] = wnd->data.date_[0];dd[1] = wnd->data.date_[1];//возьмем первые два символа
+                        mm[0] = wnd->data.date_[3];mm[1] = wnd->data.date_[4];
+                        yy[0] = wnd->data.date_[6];yy[1] = wnd->data.date_[7];
+                        HH[0] = wnd->data.time_[0];HH[1] = wnd->data.time_[1];
+                        MM[0] = wnd->data.time_[3];MM[1] = wnd->data.time_[4];
+                        //запустим системную команду date
+                        QStringList arguments; QProcess myProcess; QString program;
+                        program = "date";
+                        arguments << QString("20%1-%2-%3 %4:%5").arg(yy).arg(mm).arg(dd).arg(HH).arg(MM);
+                        myProcess.start(program, arguments);
+                        myProcess.waitForFinished();
+                        //qDebug() << myProcess.readLine();
+                    }
+                    if(wnd->dlgCE303->isVisible() ){
+                        emit changeDataCE303();
+                    }
                 }else{
                     wnd->data.time_ = "--";
                     ce303offline++;
@@ -594,6 +708,15 @@ void Thread_485::run() {
                     wnd->data.voltc = temp.toFloat();
 //                    qDebug() << QString("volta %1").arg(wnd->data.volta);
 //                    if(ok)qDebug("Ok");
+                    if(wnd->data.volta < 180 || wnd->data.voltb < 180 || wnd->data.voltc < 180){
+                        //стоп моторам
+                        //wnd->data.motor_need_to_stop = true;
+                        //wnd->data.time_to_stop = wnd->data.overlevel_time_to_stop;
+                        if( (wnd->data.error_flags & ALARM_220) == 0){
+                            wnd->data.error_flags |= ALARM_220;
+                            qCritical()<<QString("power alarm %1 %2 %3").arg(wnd->data.volta).arg(wnd->data.voltb).arg(wnd->data.voltc);
+                        }
+                    }
                 }else{
                     wnd->data.volta = wnd->data.voltb = wnd->data.voltb = -1;
                     ce303offline++;
@@ -603,20 +726,20 @@ void Thread_485::run() {
                     char aa[20];
                     QByteArray ar = wnd->data.tempstr.toAscii();
                     sprintf(aa, "TIME_(%s)", (char*)(ar.data() ));
-                    //преобразуем точку в двоеточие
-                    aa[8] = aa[11] = ':';
-                    int t = request(aa);
-                    if(t == 0 || t == 6 ){
+                    aa[8] = aa[11] = ':';//преобразуем точку в двоеточие
+                    int t = request(aa);//отправим запрос СЕ303
+                    if(t == 0 || t == 6 ){//без ошибок или АСК
                         qDebug()<<QString("%1 write - OK!").arg(aa);
+                        //надо обновить системные дата/время
+                        wnd->data.need_to_set_date_time_fromCE303 = true;
                     }
                     if(t == 0x15){qDebug()<<QString("TIME_ write - NACK");}
-                    if(t == -1){
+                    if(t == -1){//ошибка произошла
                         qDebug("TIME_ write - ERR!");
                         QMessageBox msgBox;
                         msgBox.setText("Error write\nTIME_ command");
                         msgBox.exec();
                     }
-
                     wnd->data.CE303needupdate = update_none;
                 }
                 //--------------------------------------------------
@@ -627,20 +750,20 @@ void Thread_485::run() {
                     int t = request(aa);
                     if(t == 0 || t == 6 ){
                         qDebug()<<QString("%1 write - OK!").arg(aa);
+                        wnd->data.need_to_set_date_time_fromCE303 = true;
                     }
                     if(t == 0x15){
                         qDebug()<<QString("DATE_ write - NACK");
                         QMessageBox msgBox;
                         msgBox.setText("NACK\nDATE_ command");
                         msgBox.exec();
-}
+                    }
                     if(t == -1){
                         qDebug("DATE_ write - ERR!");
                         QMessageBox msgBox;
                         msgBox.setText("Error write\nDATE_ command");
                         msgBox.exec();
                     }
-
                     wnd->data.CE303needupdate = update_none;
                 }
                 //--------------------------------------------------
@@ -657,42 +780,54 @@ void Thread_485::run() {
                         QMessageBox msgBox;
                         msgBox.setText("NACK\nFCCUR command");
                         msgBox.exec();
-}
+                    }
                     if(t == -1){
                         qDebug("FCCUR write - ERR!");
                         QMessageBox msgBox;
                         msgBox.setText("Error write\nFCCUR command");
                         msgBox.exec();
                     }
-
                     wnd->data.CE303needupdate = update_none;
                 }
                 //closeCE303();
             }//if(openCE303() != -1)
+            else{
+                if((wnd->data.error_flags & ERROR_CE303) == 0){
+                    wnd->data.error_flags |= ERROR_CE303;
+                    qCritical("CE303 offline");
+                }
+            }
             if(ce303offline > 5){
                 ce303open = false;
                 ce303offline = 0;
                 qDebug("CE303 goes offline, try open it. wait some time");// после отвала се303 тупит пару минут
             }
             //обновим показания диалога CE303
-            //if (NULL != wnd->dlgCE303.get()) {
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if(!wnd->data.dlgCE303isVisible){
+            if(wnd->dlgCE303->isVisible() ){
                 emit changeDataCE303();
             }
         }//if(wnd->isCE303){
 //--------------------------
         else{//вместо работы со счетчиком немного потупим.
             //usleep(200000);
-            QThread::msleep(100);
+            //QThread::msleep(100);
             //QThread::msleep(2000);
         }
+        //обновим показания диалога ATV12
+        if(wnd->data.isATV12 && wnd->dlgATV12->isVisible()) {
+            emit changeDataATV12();
+        }
+        if(wnd->data.isSoftStart && wnd->dlgATV12->isVisible()) {
+            emit changeDataATV12();
+        }
+        //QThread::msleep(500);
+        QThread::msleep(100);
     }//end while(done)
 //qDebug() << "Thread_485::done";
 //power OFF all motors before exit programm
     write_modbus_reg(1, 8501, 0);   write_modbus_reg(2, 8501, 0);
     write_modbus_reg(3, 8501, 0);   write_modbus_reg(4, 8501, 0);
-    write_modbus_reg(5, 8501, 0);   write_modbus_reg(6, 8501, 0);
+//    write_modbus_reg(5, 8501, 0);   write_modbus_reg(6, 8501, 0);
 
     Posix_File->close();// закроем порт перед выходом
 //qDebug() << "Thread_485::Posix_File->close()";
@@ -700,5 +835,5 @@ void Thread_485::run() {
 //===============================================================================
 void Thread_485::quit(){
     wnd->done = false;// переменная для завершения цикла опроса
-    qDebug() << "Thread_485::quit";
+//    qDebug() << "Thread_485::quit";
 }

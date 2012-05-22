@@ -25,11 +25,13 @@
 #include "dialogCalibr.h"
 #include "dialogNasosParameter.h"
 #include "data_struct.h"
-#include "www.h"
+//#include "www.h"
 
 namespace Ui {
     class MainWindow;
 }
+
+class FortuneServer;
 
 class MainWindow : public QMainWindow{
     Q_OBJECT
@@ -65,7 +67,7 @@ public:
     data_struct data;
     bool done;
 private:
-    FortuneServer HTTPserver;
+    FortuneServer * HTTPserver;
 private slots:
     void on_ShowDialogATV12_clicked();
     void on_ShowDialogCE303_clicked();
